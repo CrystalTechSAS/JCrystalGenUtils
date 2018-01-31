@@ -34,6 +34,14 @@ public abstract class AbsCodeBlock extends ArrayList<String> implements AbsICode
         return new IF();
     }
     @Override
+	public final IF $if(boolean putif, String cond, Runnable block){
+        if(cond == null || !putif)
+            block.run();
+        else
+            this.$(buildIf(cond), block);
+        return new IF();
+    }
+    @Override
 	public final void $if(String cond, String code){
         this.$(buildIf(cond)+"{"+code+"}");
     }
@@ -190,6 +198,9 @@ public abstract class AbsCodeBlock extends ArrayList<String> implements AbsICode
 			}
 			@Override public IF $if(String cond, Runnable block) {
 				return AbsCodeBlock.this.$if(cond, block);
+			}
+			@Override public IF $if(boolean putIf, String cond, Runnable block) {
+				return AbsCodeBlock.this.$if(putIf, cond, block);
 			}
 			@Override public void $if(String cond, String code) {
 				AbsCodeBlock.this.$if(cond, code);

@@ -16,6 +16,8 @@ public interface AbsICodeBlock {
 	int $(String ins);
 
 	IF $if(String cond, Runnable block);
+	
+	IF $if(boolean putif, String cond, Runnable block);
 
 	void $if(String cond, String code);
 
