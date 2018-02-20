@@ -159,6 +159,10 @@ public abstract class AbsCodeBlock extends ArrayList<String> implements AbsICode
             this.tipo = tipo;
             this.nombre = nombre;
         }
+        public final PL $(PL params) {
+        		params.lista.add(0, this);
+        		return params;
+        }
     }
     public static class PL{
         public final ArrayList<P> lista;
@@ -262,6 +266,7 @@ public abstract class AbsCodeBlock extends ArrayList<String> implements AbsICode
 			@Override public boolean is_Web() {
 				return AbsCodeBlock.this.is_Web();
 			}
+			
     }
     
     public static void addResource(InputStream resource, Map<String, Object> config, File out) throws Exception{
