@@ -117,4 +117,11 @@ public class AbsJavascriptCode extends AbsCodeBlock{
 			$("import " + h + ";");
 	}
 
+	public void append(String val) {
+		if(isEmpty())
+			$(val);
+		else
+			set(size()-1, get(size()-1)+val);
+	}
+	
 }
