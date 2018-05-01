@@ -123,5 +123,9 @@ public class AbsJavascriptCode extends AbsCodeBlock{
 		else
 			set(size()-1, get(size()-1)+val);
 	}
+	@Override
+	public void $M(int modifiers, String retorno, String name, PL params, String excepciones, Runnable block) {
+		$M(modifiers, retorno, name, params, block);
+	}
 	
 }

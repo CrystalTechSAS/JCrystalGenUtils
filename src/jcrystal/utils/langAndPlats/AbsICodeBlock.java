@@ -1,8 +1,5 @@
 package jcrystal.utils.langAndPlats;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.List;
 
 import jcrystal.utils.StringSeparator;
@@ -57,6 +54,8 @@ public interface AbsICodeBlock {
 	void $M(int modifiers, String retorno, String name, StringSeparator params, Runnable block);
 
 	void $M(int modifiers, String retorno, String name, StringSeparator params, String excepciones, Runnable block);
+	
+	void $M(int modifiers, String retorno, String name, PL params, String excepciones, Runnable block);
 
 	void $M(int modifiers, String tipoRetorno, String name, PL params, Runnable block, String retorno);
 

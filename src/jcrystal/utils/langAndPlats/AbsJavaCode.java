@@ -105,19 +105,33 @@ public class AbsJavaCode extends AbsCodeBlock{
     }
 
     @Override
-	public void $M(int modifiers, String retorno, String name, StringSeparator params, String excepciones, Runnable block) {
-        StringSeparator mods = new StringSeparator(" ");
-        if(Modifier.isPublic(modifiers))mods.add("public");
-        else if(Modifier.isProtected(modifiers))mods.add("protected");
-        else if(Modifier.isPrivate(modifiers))mods.add("private");
-        if(Modifier.isStatic(modifiers))mods.add("static");
-        if(retorno == null)
-        	retorno = "void";
-        this.$(mods + " " + retorno + " " + name + "(" + params + ")" + excepciones, block);
-	}
+    public void $M(int modifiers, String retorno, String name, StringSeparator params, String excepciones, Runnable block) {
+	    StringSeparator mods = new StringSeparator(" ");
+	    if(Modifier.isPublic(modifiers))mods.add("public");
+	    else if(Modifier.isProtected(modifiers))mods.add("protected");
+	    else if(Modifier.isPrivate(modifiers))mods.add("private");
+	    if(Modifier.isStatic(modifiers))mods.add("static");
+	    if(retorno == null)
+		    retorno = "void";
+	    this.$(mods + " " + retorno + " " + name + "(" + params + ")" + excepciones, block);
+    }
 	public final void $import(String...packages){
 		for(String h : packages)
 			$("import " + h + ";");
+	}
+	@Override
+	public void $M(int modifiers, String retorno, String name, PL params, String excepciones, Runnable block) {
+		StringSeparator mods = new StringSeparator(" ");
+	        if(Modifier.isPublic(modifiers))mods.add("public");
+	        else if(Modifier.isProtected(modifiers))mods.add("protected");
+	        else if(Modifier.isPrivate(modifiers))mods.add("private");
+	        if(Modifier.isStatic(modifiers))mods.add("static");
+	        StringSeparator pars = new StringSeparator(", ");
+	        for(P p : params.lista)if(p!=null)
+	            pars.add(p.tipo + " " + p.nombre);
+	        if(retorno == null)
+	        	retorno = "void";
+	        this.$(mods + " " + retorno + " " + name + "(" + pars + ")" + excepciones, block);
 	}
 
 }

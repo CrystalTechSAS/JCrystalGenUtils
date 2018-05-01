@@ -27,7 +27,7 @@ public abstract class AbsCodeBlock extends ArrayList<String> implements AbsICode
     }
     @Override
 	public final IF $if(String cond, Runnable block){
-        if(cond == null)
+        if(cond == null || cond.trim().isEmpty())
             block.run();
         else
             this.$(buildIf(cond), block);
@@ -35,7 +35,7 @@ public abstract class AbsCodeBlock extends ArrayList<String> implements AbsICode
     }
     @Override
 	public final IF $if(boolean putif, String cond, Runnable block){
-        if(cond == null || !putif)
+        if(cond == null || cond.trim().isEmpty() || !putif)
             block.run();
         else
             this.$(buildIf(cond), block);
@@ -238,6 +238,9 @@ public abstract class AbsCodeBlock extends ArrayList<String> implements AbsICode
 			}
 			@Override public void $M(int modifiers, String retorno, String name, PL params, Runnable block) {
 				AbsCodeBlock.this.$M(modifiers, retorno, name, params, block);
+			}
+			@Override public void $M(int modifiers, String retorno, String name, PL params, String excepciones, Runnable block) {
+				AbsCodeBlock.this.$M(modifiers, retorno, name, params, excepciones, block);
 			}
 			@Override public void $M(int modifiers, String retorno, String name, StringSeparator params, Runnable block) {
 				AbsCodeBlock.this.$M(modifiers, retorno, name, params, block);
