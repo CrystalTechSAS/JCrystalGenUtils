@@ -43,7 +43,10 @@ public abstract class AbsCodeBlock extends ArrayList<String> implements AbsICode
     }
     @Override
 	public final void $if(String cond, String code){
-        this.$(buildIf(cond)+"{"+code+"}");
+	    if(cond==null || cond.trim().isEmpty())
+		    this.$(code);
+	    else
+		    this.$(buildIf(cond)+"{"+code+"}");
     }
     @Override
 	public final void $else_if(String cond, Runnable block){
@@ -86,7 +89,6 @@ public abstract class AbsCodeBlock extends ArrayList<String> implements AbsICode
     }
 
     public void saveFile(File out){
-        AbsJavaCode.safeMkdirs(out.getParentFile());
         try(PrintWriter pw = new PrintWriter(out)){
             for(String h : this)
                 pw.println(h);
@@ -166,12 +168,17 @@ public abstract class AbsCodeBlock extends ArrayList<String> implements AbsICode
     }
     public static class PL{
         public final ArrayList<P> lista;
+        public static final PL EMPTY = new PL(); 
         protected PL(java.util.List<P> list){
             this.lista = new ArrayList<>(list);
         }
         protected PL(P...list){
             this.lista = new ArrayList<>(Arrays.asList(list));
         }
+        protected PL(java.util.List<P> list, P...list2){
+              this.lista = new ArrayList<>(list);
+              this.lista.addAll(Arrays.asList(list2));
+          }
         public final void add(P p){
         	lista.add(p);
         }
@@ -271,33 +278,32 @@ public abstract class AbsCodeBlock extends ArrayList<String> implements AbsICode
 			}
 			
     }
-    
     public static void addResource(InputStream resource, Map<String, Object> config, File out) throws Exception{
-        out.getParentFile().mkdirs();
-        
-        try(BufferedReader br = new BufferedReader(new InputStreamReader(resource)){
-        	public String readLine() throws IOException {
-        		String line = super.readLine();
-        		if(line != null)
-        			for(Entry<String, Object> val : config.entrySet())
-                		line = line.replace("#"+val.getKey(), ""+val.getValue());
-                return line;
-        	};
-        }; PrintWriter pw = new PrintWriter(out)){
-        	for(String line; (line = br.readLine())!=null; ){
-        		if(line.startsWith("#IF")){
-            		final Boolean val = (Boolean)config.get(line.substring(3).trim());
-            		ArrayList<String> IF = new ArrayList<>();
-            		ArrayList<String> ELSE = new ArrayList<>();
-            		for(;!(line=br.readLine()).startsWith("#");IF.add(line));
-            		if(line.startsWith("#ELSE"))
-            			for(;!(line=br.readLine()).startsWith("#");ELSE.add(line));
-            		if(!line.startsWith("#ENDIF"))
-            			throw new NullPointerException();
-            		(val?IF:ELSE).stream().forEach(pw::println);
-            	}else 
-            		pw.println(line);
-            }
-        }
-    }
+	        out.getParentFile().mkdirs();
+	        
+	        try(BufferedReader br = new BufferedReader(new InputStreamReader(resource)){
+	        	public String readLine() throws IOException {
+	        		String line = super.readLine();
+	        		if(line != null)
+	        			for(Entry<String, Object> val : config.entrySet())
+	                		line = line.replace("#"+val.getKey(), ""+val.getValue());
+	                return line;
+	        	};
+	        }; PrintWriter pw = new PrintWriter(out)){
+	        	for(String line; (line = br.readLine())!=null; ){
+	        		if(line.startsWith("#IF")){
+	            		final Boolean val = (Boolean)config.get(line.substring(3).trim());
+	            		ArrayList<String> IF = new ArrayList<>();
+	            		ArrayList<String> ELSE = new ArrayList<>();
+	            		for(;!(line=br.readLine()).startsWith("#");IF.add(line));
+	            		if(line.startsWith("#ELSE"))
+	            			for(;!(line=br.readLine()).startsWith("#");ELSE.add(line));
+	            		if(!line.startsWith("#ENDIF"))
+	            			throw new NullPointerException();
+	            		(val?IF:ELSE).stream().forEach(pw::println);
+	            	}else 
+	            		pw.println(line);
+	            }
+	        }
+	    }
 }

@@ -87,5 +87,11 @@ public interface AbsICodeBlock {
     public default PL $(List<P> list){
         return new PL(list);
     }
+    public default PL $(List<P> list, P...list2){
+        return new PL(list, list2);
+    }
+    public default PL $(PL list, P...list2){
+        return new PL(list.lista, list2);
+    }
 
 }
