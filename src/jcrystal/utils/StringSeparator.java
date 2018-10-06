@@ -34,6 +34,9 @@ public class StringSeparator {
     public final boolean isEmpty(){
         return act.isEmpty();
     }
+    public void clear() {
+	    act = "";
+    }
     @Override
     public String toString() {
         return act;
