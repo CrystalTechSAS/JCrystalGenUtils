@@ -25,6 +25,21 @@ public class StringUtils {
         }else
             return v.substring(0, 1).toUpperCase() + v.substring(1).toLowerCase();
     }
+    public static String deCamelizeWithSpaces(String v) {
+	    StringBuffer sb = new StringBuffer(v.length()*2);
+	    char ant = '\0';
+	    for(char c : v.toCharArray()) {
+		    if(ant == '\0')
+			    sb.append(Character.toUpperCase(c));
+		    else if(Character.isLowerCase(ant) && Character.isUpperCase(c)) {
+			    sb.append(' ');
+			    sb.append(Character.toUpperCase(c));
+		    }else
+			    sb.append(c);
+		    ant = c;
+	    }
+	    return sb.toString();
+    }
     public static String camelizarSoft(String v){
 	    if(v.isEmpty())return v;
         if(v.contains("_")||v.contains("-")){
