@@ -63,15 +63,6 @@ public interface AbsICodeBlock {
 
 	String buildIf(String cond);
 
-	// --- Context methods
-	boolean is_iOS();
-
-	boolean is_Android();
-
-	boolean is_Server();
-
-	boolean is_Web();
-	
 	public default P P(String tipo, String nombre){
         return new P(tipo, nombre);
     }

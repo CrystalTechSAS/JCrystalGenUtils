@@ -2,6 +2,8 @@ package jcrystal.utils.langAndPlats;
 
 public class CodeGeneratorContext {
 	public static final ThreadLocal<CodeGeneratorContext> userThreadLocal = new ThreadLocal<>();
+	public ContextLang lang = null;
+	public ContextType type = null;
 	public static void set() {
 		userThreadLocal.set(new CodeGeneratorContext());
 	}
@@ -15,37 +17,46 @@ public class CodeGeneratorContext {
 		return ret;
 	}
 	
-	public Tipo tipo = null;
-	
-	public static void init_iOS(){
-		get().tipo = Tipo.IOS;
+	public enum ContextType{
+		SERVER,
+		CLIENT,
+		WEB,
+		MOBILE;
+		ContextType parent;
+		public void init() {
+			CodeGeneratorContext.get().type = this;
+		}
+		public boolean is() {
+			return CodeGeneratorContext.get().type.is(this);
+		}
+		public boolean is(ContextType type) {
+			return this == type || (parent != null && parent.is(type));
+		}
+		static {
+			WEB.parent = CLIENT;
+			MOBILE.parent = CLIENT;
+		}
+		public static boolean isAndroid() {
+			return ContextLang.JAVA.is() && MOBILE.is();
+		}
+		public static boolean isiOS() {
+			return ContextLang.SWIFT.is() && MOBILE.is();
+		}
 	}
-	public static void init_Android(){
-		get().tipo = Tipo.ANDROID;
+	public enum ContextLang{
+		JAVA,
+		SWIFT,
+		TYPESCRIPT,
+		JAVASCRIPT;
+		ContextLang parent;
+		public void init() {
+			CodeGeneratorContext.get().lang = this;
+		}
+		public boolean is() {
+			return CodeGeneratorContext.get().lang.is(this);
+		}
+		public boolean is(ContextLang type) {
+			return this == type || (parent != null && parent.is(type));
+		}
 	}
-	public static void init_Server(){
-		get().tipo = Tipo.SERVER;
-	}
-	public static void init_Web(){
-		get().tipo = Tipo.WEB;
-	}
-	public static boolean is_iOS(){ 
-		return get().tipo == Tipo.IOS;
-	}
-	public static boolean is_Android(){
-		return get().tipo == Tipo.ANDROID;
-	}
-	public static boolean is_Server(){
-		return get().tipo == Tipo.SERVER;
-	}
-	public static boolean is_Web(){
-		return get().tipo == Tipo.WEB;
-	}
-	
-    private enum Tipo{
-    	SERVER,
-    	ANDROID,
-    	IOS,
-    	WEB
-    }
 }

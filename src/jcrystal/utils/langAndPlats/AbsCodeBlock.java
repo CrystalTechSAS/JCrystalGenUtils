@@ -184,23 +184,6 @@ public abstract class AbsCodeBlock extends ArrayList<String> implements AbsICode
         }
     }
     
-    // --- Context methods
-    @Override
-	public final boolean is_iOS(){
-    	return CodeGeneratorContext.is_iOS();
-	}
-	@Override
-	public final boolean is_Android(){
-		return CodeGeneratorContext.is_Android();
-	}
-	@Override
-	public final boolean is_Server(){
-		return CodeGeneratorContext.is_Server();
-	}
-	@Override
-	public final boolean is_Web(){
-		return CodeGeneratorContext.is_Web();
-	}
     public class B implements AbsICodeBlock{
     			public final AbsCodeBlock P = AbsCodeBlock.this; 
     		private static final long serialVersionUID = 3906916076290628763L;
@@ -264,19 +247,6 @@ public abstract class AbsCodeBlock extends ArrayList<String> implements AbsICode
 			@Override public String buildIf(String cond) {
 				return AbsCodeBlock.this.buildIf(cond);
 			}
-			@Override public boolean is_iOS() {
-				return AbsCodeBlock.this.is_iOS();
-			}
-			@Override public boolean is_Android() {
-				return AbsCodeBlock.this.is_Android();
-			}
-			@Override public boolean is_Server() {
-				return AbsCodeBlock.this.is_Server();
-			}
-			@Override public boolean is_Web() {
-				return AbsCodeBlock.this.is_Web();
-			}
-			
     }
     public static void addResource(InputStream resource, Map<String, Object> config, File out) throws Exception{
 	        out.getParentFile().mkdirs();
