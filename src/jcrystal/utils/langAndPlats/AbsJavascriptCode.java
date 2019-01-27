@@ -1,10 +1,13 @@
 package jcrystal.utils.langAndPlats;
 
+import jcrystal.preprocess.descriptions.IJType;
+import jcrystal.preprocess.descriptions.WrapStringJType;
 import jcrystal.utils.StringSeparator;
 
 import java.io.*;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
+import java.util.stream.Collectors;
 
 public class AbsJavascriptCode extends AbsCodeBlock{
     private static final long serialVersionUID = 8286135788802310977L;
@@ -127,5 +130,15 @@ public class AbsJavascriptCode extends AbsCodeBlock{
 	public void $M(int modifiers, String retorno, String name, PL params, String excepciones, Runnable block) {
 		$M(modifiers, retorno, name, params, block);
 	}
-	
+	@Override
+	public String $(IJType type) {
+		if(type instanceof WrapStringJType)
+			return type.getName();
+		else if(type.getInnerTypes().isEmpty())
+			return type.getName();
+		else if(type.isArray())
+			return $(type.getInnerTypes().get(0))+"[]";
+		else
+			return type.getName()+"<" + type.getInnerTypes().stream().map(f->$(f)).collect(Collectors.joining(", ")) + ">";
+	}
 }

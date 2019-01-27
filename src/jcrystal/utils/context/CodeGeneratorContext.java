@@ -1,9 +1,12 @@
-package jcrystal.utils.langAndPlats;
+package jcrystal.utils.context;
+
+import jcrystal.preprocess.descriptions.IJType;
 
 public class CodeGeneratorContext {
 	public static final ThreadLocal<CodeGeneratorContext> userThreadLocal = new ThreadLocal<>();
 	public ContextLang lang = null;
 	public ContextType type = null;
+	public ITypeConverter typeConverter;
 	public static void set() {
 		userThreadLocal.set(new CodeGeneratorContext());
 	}
@@ -16,7 +19,26 @@ public class CodeGeneratorContext {
 			userThreadLocal.set(ret = new CodeGeneratorContext());
 		return ret;
 	}
-	
+	public static <T extends Exception> void with(ITypeConverter typeConverter, IRunnableWithException<T> code) throws T {
+		ITypeConverter last = get().typeConverter; 
+		get().typeConverter = typeConverter;
+		code.run();
+		get().typeConverter = last;
+	}
+	public static <T extends Exception> void extend(ITypeConverter typeConverter, IRunnableWithException<T> code) throws T {
+		ITypeConverter last = get().typeConverter; 
+		get().typeConverter = type->{
+			IJType ret = typeConverter.convert(type);
+			if(ret == null)
+				return last.convert(type);
+			return ret;
+		};
+		code.run();
+		get().typeConverter = last;
+	}
+	public static void set(ITypeConverter typeConverter) {
+		get().typeConverter = typeConverter;
+	}
 	public enum ContextType{
 		SERVER,
 		CLIENT,

@@ -1,6 +1,9 @@
 package jcrystal.utils.langAndPlats;
 
+import jcrystal.preprocess.descriptions.IJType;
+import jcrystal.preprocess.descriptions.WrapStringJType;
 import jcrystal.utils.StringSeparator;
+import jcrystal.utils.context.CodeGeneratorContext;
 
 import java.io.*;
 import java.lang.reflect.Modifier;
@@ -8,12 +11,13 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
-public class AbsJavaCode extends AbsCodeBlock{
+public class JavaCode extends AbsCodeBlock{
     private static final long serialVersionUID = 8286135788802310977L;
 
-	public AbsJavaCode(){}
-    public AbsJavaCode(int level){
+	public JavaCode(){}
+    public JavaCode(int level){
         super(level);
     }
 
@@ -52,7 +56,7 @@ public class AbsJavaCode extends AbsCodeBlock{
         if(Modifier.isStatic(modifiers))mods.add("static");
         StringSeparator pars = new StringSeparator(", ");
         for(P p : params.lista)if(p!=null)
-            pars.add(p.tipo + " " + p.nombre);
+            pars.add($(p.tipo) + " " + p.nombre);
         if(retorno == null)
         	retorno = "void";
         this.$(mods + " " + retorno + " " + name + "(" + pars + ")", block);
@@ -128,10 +132,29 @@ public class AbsJavaCode extends AbsCodeBlock{
 	        if(Modifier.isStatic(modifiers))mods.add("static");
 	        StringSeparator pars = new StringSeparator(", ");
 	        for(P p : params.lista)if(p!=null)
-	            pars.add(p.tipo + " " + p.nombre);
+	            pars.add($(p.tipo) + " " + p.nombre);
 	        if(retorno == null)
 	        	retorno = "void";
 	        this.$(mods + " " + retorno + " " + name + "(" + pars + ")" + excepciones, block);
 	}
+	
+	@Override
+	public String $(IJType type) {
+		if(type instanceof WrapStringJType)
+			return type.getName();
+		else if(type.getInnerTypes().isEmpty()) {
+			if(type.getName().startsWith("java.lang"))
+				return type.getSimpleName();
+			else
+				return type.getName();
+		}else if(type.isArray())
+			return $(type.getInnerTypes().get(0))+"[]";
+		else {
+			if((type.getName()+"<" + type.getInnerTypes().stream().map(f->$(f)).collect(Collectors.joining(", ")) + ">").contains("<["))
+				throw new NullPointerException();
+			return type.getName()+"<" + type.getInnerTypes().stream().map(f->$(f)).collect(Collectors.joining(", ")) + ">";
+		}
+	}
+	
 
 }

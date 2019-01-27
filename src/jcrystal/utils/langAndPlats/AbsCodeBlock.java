@@ -1,17 +1,21 @@
 package jcrystal.utils.langAndPlats;
 
-import jcrystal.utils.StringSeparator;
-
-import java.awt.List;
-import java.io.*;
-import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
-import java.util.Vector;
 import java.util.Map.Entry;
+
+import jcrystal.preprocess.descriptions.IJType;
+import jcrystal.preprocess.descriptions.WrapStringJType;
+import jcrystal.utils.StringSeparator;
+import jcrystal.utils.context.CodeGeneratorContext;
 
 public abstract class AbsCodeBlock extends ArrayList<String> implements AbsICodeBlock {
 	private static final long serialVersionUID = -994460027594152244L;
@@ -155,9 +159,13 @@ public abstract class AbsCodeBlock extends ArrayList<String> implements AbsICode
         }
     }
     public static class P{
-        public final String tipo;
+        public final IJType tipo;
         public final String nombre;
         protected P(String tipo, String nombre){
+              this.tipo = new WrapStringJType(tipo);
+              this.nombre = nombre;
+          }
+        protected P(IJType tipo, String nombre){
             this.tipo = tipo;
             this.nombre = nombre;
         }
@@ -182,12 +190,12 @@ public abstract class AbsCodeBlock extends ArrayList<String> implements AbsICode
         public final void add(P p){
         	lista.add(p);
         }
+        
     }
     
     public class B implements AbsICodeBlock{
     			public final AbsCodeBlock P = AbsCodeBlock.this; 
-    		private static final long serialVersionUID = 3906916076290628763L;
-			@Override public int $(String ins) {
+    			@Override public int $(String ins) {
 				return AbsCodeBlock.this.$(ins);
 			}
 			@Override public IF $if(String cond, Runnable block) {
@@ -246,6 +254,10 @@ public abstract class AbsCodeBlock extends ArrayList<String> implements AbsICode
 			}
 			@Override public String buildIf(String cond) {
 				return AbsCodeBlock.this.buildIf(cond);
+			}
+			@Override
+			public String $(IJType type) {
+				return AbsCodeBlock.this.$(type);
 			}
     }
     public static void addResource(InputStream resource, Map<String, Object> config, File out) throws Exception{
