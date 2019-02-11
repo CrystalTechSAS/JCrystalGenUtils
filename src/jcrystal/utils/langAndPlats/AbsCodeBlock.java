@@ -15,7 +15,6 @@ import java.util.Map.Entry;
 import jcrystal.preprocess.descriptions.IJType;
 import jcrystal.preprocess.descriptions.WrapStringJType;
 import jcrystal.utils.StringSeparator;
-import jcrystal.utils.context.CodeGeneratorContext;
 
 public abstract class AbsCodeBlock extends ArrayList<String> implements AbsICodeBlock {
 	private static final long serialVersionUID = -994460027594152244L;
