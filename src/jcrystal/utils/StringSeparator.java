@@ -1,5 +1,8 @@
 package jcrystal.utils;
 
+import java.util.List;
+import java.util.stream.Stream;
+
 /**
  * Created by G on 11/20/2016.
  */
@@ -18,6 +21,14 @@ public class StringSeparator {
         else if(!nuevo.isEmpty())
             act += separator + nuevo;
         return this;
+    }
+    public StringSeparator add(Stream<String> nuevos){
+	    nuevos.forEach(this::add);
+	    return this;
+    }
+    public StringSeparator add(List<String> nuevos){
+	    nuevos.forEach(this::add);
+	    return this;
     }
     public StringSeparator add(String nuevo){
         if(act.isEmpty())
