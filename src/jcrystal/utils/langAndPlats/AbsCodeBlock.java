@@ -86,6 +86,20 @@ public abstract class AbsCodeBlock extends ArrayList<String> implements AbsICode
         prefijo = lastPre;
         $("}"+pos);
     }
+    
+    public final void $(String pre, Runnable r, String pos, Runnable r2, String pos2){
+        $(pre+"{");
+        String lastPre = prefijo;
+        prefijo += "\t";
+        r.run();
+        prefijo = lastPre;
+        $("}"+pos+"{");
+        prefijo += "\t";
+        r2.run();
+        prefijo = lastPre;
+        $("}"+pos2);
+        
+    }
 
     @Override public boolean add(String s) {
     		return super.add(prefijo + s);
