@@ -48,39 +48,7 @@ public class JavaCode extends AbsCodeBlock{
     public final void $FE(String tipo, String name, String valor, Runnable block){
         this.$("for("+tipo+" " + name + " : " + valor + ")",  block);
     }
-    public final void $M(int modifiers, String retorno, String name, PL params, Runnable block){
-        StringSeparator mods = new StringSeparator(" ");
-        if(Modifier.isPublic(modifiers))mods.add("public");
-        else if(Modifier.isProtected(modifiers))mods.add("protected");
-        else if(Modifier.isPrivate(modifiers))mods.add("private");
-        if(Modifier.isStatic(modifiers))mods.add("static");
-        StringSeparator pars = new StringSeparator(", ");
-        for(P p : params.lista)if(p!=null)
-            pars.add($(p.tipo) + " " + p.nombre);
-        if(retorno == null)
-        	retorno = "void";
-        this.$(mods + " " + retorno + " " + name + "(" + pars + ")", block);
-    }
-
-    @Override
-    public void $M(int modifiers, String retorno, String name, StringSeparator params, Runnable block) {
-        StringSeparator mods = new StringSeparator(" ");
-        if(Modifier.isPublic(modifiers))mods.add("public");
-        else if(Modifier.isProtected(modifiers))mods.add("protected");
-        else if(Modifier.isPrivate(modifiers))mods.add("private");
-        if(Modifier.isStatic(modifiers))mods.add("static");
-        if(retorno == null)
-        	retorno = "void";
-        this.$(mods + " " + retorno + " " + name + "(" + params + ")", block);
-    }
-
-    public final void $M(int modifiers, String tipoRetorno, String name, PL params, final Runnable block, final String retorno){
-        $M(modifiers, tipoRetorno, name, params, ()->{
-            block.run();
-            $(retorno);
-        });
-    }
-
+   
     @Override
     public String buildIf(String cond) {
         return "if("+cond+")";
@@ -109,7 +77,7 @@ public class JavaCode extends AbsCodeBlock{
     }
 
     @Override
-    public void $M(int modifiers, String retorno, String name, StringSeparator params, String excepciones, Runnable block) {
+    public void $M(int modifiers, String retorno, String name, String params, String excepciones, Runnable block) {
 	    StringSeparator mods = new StringSeparator(" ");
 	    if(Modifier.isPublic(modifiers))mods.add("public");
 	    else if(Modifier.isProtected(modifiers))mods.add("protected");
@@ -117,25 +85,14 @@ public class JavaCode extends AbsCodeBlock{
 	    if(Modifier.isStatic(modifiers))mods.add("static");
 	    if(retorno == null)
 		    retorno = "void";
-	    this.$(mods + " " + retorno + " " + name + "(" + params + ")" + excepciones, block);
+	    if(excepciones == null)
+	    	this.$(mods + (!retorno.isEmpty()?" " + retorno:"") + " " + name + "(" + params + ")", block);
+	    else
+	    	this.$(mods + (!retorno.isEmpty()?" " + retorno:"") + " " + name + "(" + params + ")" + excepciones, block);
     }
 	public final void $import(String...packages){
 		for(String h : packages)
 			$("import " + h + ";");
-	}
-	@Override
-	public void $M(int modifiers, String retorno, String name, PL params, String excepciones, Runnable block) {
-		StringSeparator mods = new StringSeparator(" ");
-	        if(Modifier.isPublic(modifiers))mods.add("public");
-	        else if(Modifier.isProtected(modifiers))mods.add("protected");
-	        else if(Modifier.isPrivate(modifiers))mods.add("private");
-	        if(Modifier.isStatic(modifiers))mods.add("static");
-	        StringSeparator pars = new StringSeparator(", ");
-	        for(P p : params.lista)if(p!=null)
-	            pars.add($(p.tipo) + " " + p.nombre);
-	        if(retorno == null)
-	        	retorno = "void";
-	        this.$(mods + " " + retorno + " " + name + "(" + pars + ")" + excepciones, block);
 	}
 	
 	@Override
@@ -154,6 +111,10 @@ public class JavaCode extends AbsCodeBlock{
 				throw new NullPointerException();
 			return type.getName()+"<" + type.getInnerTypes().stream().map(f->$(f)).collect(Collectors.joining(", ")) + ">";
 		}
+	}
+	@Override
+	public String $V(IJType type, String name) {
+		return $(type)+" " + name;
 	}
 	
 

@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import jcrystal.preprocess.descriptions.IJType;
 import jcrystal.preprocess.descriptions.WrapStringJType;
@@ -132,13 +134,7 @@ public abstract class AbsCodeBlock extends ArrayList<String> implements AbsICode
     @Override
 	public abstract void $FE(String tipo, String name, String valor, Runnable block);
     @Override
-	public abstract void $M(int modifiers, String retorno, String name, PL params, Runnable block);
-    @Override
-	public abstract void $M(int modifiers, String retorno, String name, StringSeparator params, Runnable block);
-    @Override
-	public abstract void $M(int modifiers, String retorno, String name, StringSeparator params, String excepciones, Runnable block);
-    @Override
-	public abstract void $M(int modifiers, String tipoRetorno, String name, PL params, final Runnable block, final String retorno);
+	public abstract void $M(int modifiers, String retorno, String name, String params, String excepciones, Runnable block);
     @Override
 	public abstract void $L(String pre, Lambda block, String pos);
     @Override
@@ -189,7 +185,10 @@ public abstract class AbsCodeBlock extends ArrayList<String> implements AbsICode
     }
     public static class PL{
         public final ArrayList<P> lista;
-        public static final PL EMPTY = new PL(); 
+        public static final PL EMPTY = new PL();
+        public PL(){
+            this.lista = new ArrayList<>();
+        }
         protected PL(java.util.List<P> list){
             this.lista = new ArrayList<>(list);
         }
@@ -203,7 +202,21 @@ public abstract class AbsCodeBlock extends ArrayList<String> implements AbsICode
         public final void add(P p){
         	lista.add(p);
         }
-        
+        public String collect(Function<P, String> mapper) {
+        	return lista.stream().map(mapper).collect(Collectors.joining(", "));
+        }
+        public String collect(String prefix, Function<P, String> mapper) {
+        	String ret = lista.stream().map(mapper).collect(Collectors.joining(", "));
+        	if(ret.isEmpty())
+        		return prefix;
+        	return prefix+", "+ret;
+        }
+        public String collect(Function<P, String> mapper, String suffix) {
+        	String ret = lista.stream().map(mapper).collect(Collectors.joining(", "));
+        	if(ret.isEmpty())
+        		return suffix;
+        	return ret + ", "+suffix;
+        }
     }
     
     public class B implements AbsICodeBlock{
@@ -247,20 +260,8 @@ public abstract class AbsCodeBlock extends ArrayList<String> implements AbsICode
 			@Override public void $FE(String tipo, String name, String valor, Runnable block) {
 				AbsCodeBlock.this.$FE(tipo, name, valor, block);
 			}
-			@Override public void $M(int modifiers, String retorno, String name, PL params, Runnable block) {
-				AbsCodeBlock.this.$M(modifiers, retorno, name, params, block);
-			}
-			@Override public void $M(int modifiers, String retorno, String name, PL params, String excepciones, Runnable block) {
-				AbsCodeBlock.this.$M(modifiers, retorno, name, params, excepciones, block);
-			}
-			@Override public void $M(int modifiers, String retorno, String name, StringSeparator params, Runnable block) {
-				AbsCodeBlock.this.$M(modifiers, retorno, name, params, block);
-			}
-			@Override public void $M(int modifiers, String retorno, String name, StringSeparator params, String excepciones, Runnable block) {
+			@Override public void $M(int modifiers, String retorno, String name, String params, String excepciones, Runnable block) {
 				AbsCodeBlock.this.$M(modifiers, retorno, name, params,  excepciones, block);
-			}
-			@Override public void $M(int modifiers, String tipoRetorno, String name, PL params, Runnable block, String retorno) {
-				AbsCodeBlock.this.$M(modifiers, tipoRetorno, name, params, block, retorno);
 			}
 			@Override public void $L(String pre, Lambda block, String pos) {
 				AbsCodeBlock.this.$L(pre, block, pos);
@@ -271,6 +272,10 @@ public abstract class AbsCodeBlock extends ArrayList<String> implements AbsICode
 			@Override
 			public String $(IJType type) {
 				return AbsCodeBlock.this.$(type);
+			}
+			@Override
+			public String $V(IJType type, String name) {
+				return AbsCodeBlock.this.$V(type, name);
 			}
     }
     public static void addResource(InputStream resource, Map<String, Object> config, File out) throws Exception{

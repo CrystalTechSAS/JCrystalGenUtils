@@ -1,6 +1,8 @@
 package jcrystal.utils.langAndPlats;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import jcrystal.preprocess.descriptions.IJType;
 import jcrystal.preprocess.descriptions.JTypeSolver;
@@ -28,6 +30,11 @@ public interface AbsICodeBlock {
 	void $(String pre, Runnable r);
 	
 	String $(IJType type);
+	String $V(IJType type, String name);
+	default String $V(P p) {
+		return $V($convert(p.tipo), p.nombre);
+	}
+	
 	default IJType $convert(IJType type) {
 		CodeGeneratorContext cnt = CodeGeneratorContext.get(); 
 		return cnt.typeConverter == null ? type : cnt.typeConverter.convert(type);
@@ -75,15 +82,33 @@ public interface AbsICodeBlock {
 	 */
 	void $FE(String tipo, String name, String valor, Runnable block);
 
-	void $M(int modifiers, String retorno, String name, PL params, Runnable block);
+	void $M(int modifiers, String retorno, String name, String params, String excepciones, Runnable block);
 
-	void $M(int modifiers, String retorno, String name, StringSeparator params, Runnable block);
+	default void $M(int modifiers, String retorno, String name, String params, Runnable block) {
+		$M(modifiers, retorno, name, params, null, block);
+	}
 
-	void $M(int modifiers, String retorno, String name, StringSeparator params, String excepciones, Runnable block);
+	default void $M(int modifiers, String retorno, String name, PL params, Runnable block) {
+		$M(modifiers, retorno, name, params.lista.stream().filter(p->p!=null).map(p->$V(p)).collect(Collectors.joining(", ")), block);
+	}
 	
-	void $M(int modifiers, String retorno, String name, PL params, String excepciones, Runnable block);
+	default void $M(int modifiers, String retorno, String name, StringSeparator params, Runnable block) {
+		$M(modifiers, retorno, name, params.toString(), block);
+	}
+	default void $M(int modifiers, String retorno, String name, List<String> params, Runnable block) {
+		$M(modifiers, retorno, name, params.stream().collect(Collectors.joining(", ")), block);
+	}
+	default void $M(int modifiers, String retorno, String name, Stream<P> params, Runnable block) {
+		$M(modifiers, retorno, name, params.map(p->$V(p)).collect(Collectors.joining(", ")), block);
+	}
 
-	void $M(int modifiers, String tipoRetorno, String name, PL params, Runnable block, String retorno);
+	default void $M(int modifiers, String retorno, String name, StringSeparator params, String excepciones, Runnable block) {
+		$M(modifiers, retorno, name, params.toString(), excepciones, block);
+	}
+	
+	default void $M(int modifiers, String retorno, String name, PL params, String excepciones, Runnable block) {
+		$M(modifiers, retorno, name, params.lista.stream().filter(p->p!=null).map(p->$V(p)).collect(Collectors.joining(", ")), excepciones, block);
+	}
 
 	void $L(String pre, Lambda block, String pos);
 
