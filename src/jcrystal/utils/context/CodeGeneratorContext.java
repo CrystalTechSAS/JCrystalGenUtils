@@ -69,7 +69,8 @@ public class CodeGeneratorContext {
 		JAVA,
 		SWIFT,
 		TYPESCRIPT,
-		JAVASCRIPT;
+		JAVASCRIPT,
+		DART;
 		ContextLang parent;
 		public void init() {
 			CodeGeneratorContext.get().lang = this;

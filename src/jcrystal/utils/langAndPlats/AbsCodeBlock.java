@@ -189,10 +189,10 @@ public abstract class AbsCodeBlock extends ArrayList<String> implements AbsICode
         public PL(){
             this.lista = new ArrayList<>();
         }
-        protected PL(java.util.List<P> list){
+        public PL(java.util.List<P> list){
             this.lista = new ArrayList<>(list);
         }
-        protected PL(P...list){
+        public PL(P...list){
             this.lista = new ArrayList<>(Arrays.asList(list));
         }
         protected PL(java.util.List<P> list, P...list2){
@@ -216,6 +216,14 @@ public abstract class AbsCodeBlock extends ArrayList<String> implements AbsICode
         	if(ret.isEmpty())
         		return suffix;
         	return ret + ", "+suffix;
+        }
+        public void adding(P p,Runnable r) {
+        	lista.add(p);
+        	r.run();
+        	lista.remove(lista.size()-1);
+        }
+        public void pop() {
+        	lista.remove(lista.size()-1);
         }
     }
     
