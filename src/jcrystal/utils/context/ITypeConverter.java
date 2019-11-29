@@ -1,7 +1,7 @@
 package jcrystal.utils.context;
 
-import jcrystal.preprocess.descriptions.IJType;
-import jcrystal.preprocess.descriptions.JType;
+import jcrystal.types.IJType;
+import jcrystal.types.JType;
 
 public interface ITypeConverter {
 

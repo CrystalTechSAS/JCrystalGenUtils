@@ -4,8 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import jcrystal.preprocess.descriptions.IJType;
-import jcrystal.preprocess.descriptions.JTypeSolver;
+import jcrystal.types.IJType;
 import jcrystal.utils.StringSeparator;
 import jcrystal.utils.context.CodeGeneratorContext;
 import jcrystal.utils.langAndPlats.AbsCodeBlock.IF;
@@ -38,9 +37,6 @@ public interface AbsICodeBlock {
 	default IJType $convert(IJType type) {
 		CodeGeneratorContext cnt = CodeGeneratorContext.get(); 
 		return cnt.typeConverter == null ? type : cnt.typeConverter.convert(type);
-	}
-	default IJType $convert(Class<?> type){
-		return $convert(JTypeSolver.load(type, null));
 	}
 
 	void $(String pre, Runnable r, String pos);
@@ -119,9 +115,6 @@ public interface AbsICodeBlock {
 	    }
 	public default P P(IJType tipo, String nombre){
         return new P(tipo, nombre);
-    }
-    public default P P(Class<?> tipo, String nombre){
-        return new P(JTypeSolver.load(tipo, null), nombre);
     }
     public default PL $(P...list){
         return new PL(list);

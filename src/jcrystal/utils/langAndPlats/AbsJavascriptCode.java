@@ -1,7 +1,7 @@
 package jcrystal.utils.langAndPlats;
 
-import jcrystal.preprocess.descriptions.IJType;
-import jcrystal.preprocess.descriptions.WrapStringJType;
+import jcrystal.types.IJType;
+import jcrystal.types.WrapStringJType;
 import jcrystal.utils.StringSeparator;
 
 import java.io.*;

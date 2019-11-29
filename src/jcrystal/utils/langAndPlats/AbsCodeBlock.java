@@ -14,8 +14,8 @@ import java.util.Map.Entry;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import jcrystal.preprocess.descriptions.IJType;
-import jcrystal.preprocess.descriptions.WrapStringJType;
+import jcrystal.types.IJType;
+import jcrystal.types.WrapStringJType;
 import jcrystal.utils.StringSeparator;
 
 public abstract class AbsCodeBlock extends ArrayList<String> implements AbsICodeBlock {

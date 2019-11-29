@@ -1,6 +1,6 @@
 package jcrystal.utils.context;
 
-import jcrystal.preprocess.descriptions.IJType;
+import jcrystal.types.IJType;
 
 public class CodeGeneratorContext {
 	public static final ThreadLocal<CodeGeneratorContext> userThreadLocal = new ThreadLocal<>();
