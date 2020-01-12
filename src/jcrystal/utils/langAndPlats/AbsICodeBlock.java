@@ -41,6 +41,8 @@ public interface AbsICodeBlock {
 
 	void $(String pre, Runnable r, String pos);
 
+	void $catch(String ex, Runnable block);
+	
 	void $VoidCatch(String ex);
 
 	void $SingleCatch(String ex, String p);

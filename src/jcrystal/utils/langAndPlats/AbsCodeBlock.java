@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 
 import jcrystal.types.IJType;
 import jcrystal.types.WrapStringJType;
-import jcrystal.utils.StringSeparator;
 
 public abstract class AbsCodeBlock extends ArrayList<String> implements AbsICodeBlock {
 	private static final long serialVersionUID = -994460027594152244L;
@@ -116,6 +115,15 @@ public abstract class AbsCodeBlock extends ArrayList<String> implements AbsICode
 			ex.initCause(e);
 			throw ex;
 		}
+    }
+    @Override
+	public final void $catch(String ex, Runnable block){
+        $("catch("+ex+"){");
+        String lastPre = prefijo;
+        prefijo += "\t";
+        block.run();
+        prefijo = lastPre;
+        $("}");
     }
     @Override
 	public final void $VoidCatch(String ex){
@@ -252,6 +260,9 @@ public abstract class AbsCodeBlock extends ArrayList<String> implements AbsICode
 			}
 			@Override public void $(String pre, Runnable r, String pos) {
 				AbsCodeBlock.this.$(pre, r, pos);
+			}
+			@Override public void $catch(String ex, Runnable block) {
+				AbsCodeBlock.this.$catch(ex, block);
 			}
 			@Override public void $VoidCatch(String ex) {
 				AbsCodeBlock.this.$VoidCatch(ex);
