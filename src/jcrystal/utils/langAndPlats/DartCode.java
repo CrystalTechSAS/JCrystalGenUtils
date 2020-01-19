@@ -1,17 +1,16 @@
 package jcrystal.utils.langAndPlats;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.lang.reflect.Modifier;
+import java.util.stream.Collectors;
+
 import jcrystal.types.IJType;
 import jcrystal.types.WrapStringJType;
 import jcrystal.utils.StringSeparator;
-import jcrystal.utils.context.CodeGeneratorContext;
-
-import java.io.*;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.stream.Collectors;
 
 public class DartCode extends AbsCodeBlock{
     private static final long serialVersionUID = 8286135788802310977L;

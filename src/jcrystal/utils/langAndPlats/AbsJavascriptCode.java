@@ -6,7 +6,6 @@ import jcrystal.utils.StringSeparator;
 
 import java.io.*;
 import java.lang.reflect.Modifier;
-import java.lang.reflect.Type;
 import java.util.stream.Collectors;
 
 public class AbsJavascriptCode extends AbsCodeBlock{
