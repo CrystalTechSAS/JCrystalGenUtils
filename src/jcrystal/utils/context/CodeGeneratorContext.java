@@ -1,17 +1,15 @@
 package jcrystal.utils.context;
 
+import jcrystal.lang.Language;
 import jcrystal.types.IJType;
 
 public class CodeGeneratorContext {
 	public static final ThreadLocal<CodeGeneratorContext> userThreadLocal = new ThreadLocal<>();
-	public ContextLang lang = null;
+	public Language lang = null;
 	public ContextType type = null;
 	public ITypeConverter typeConverter;
 	public static void set() {
 		userThreadLocal.set(new CodeGeneratorContext());
-	}
-	public static void clear() {
-		userThreadLocal.remove();
 	}
 	public static CodeGeneratorContext get() {
 		CodeGeneratorContext ret = userThreadLocal.get();
@@ -36,8 +34,15 @@ public class CodeGeneratorContext {
 		code.run();
 		get().typeConverter = last;
 	}
-	public static void set(ITypeConverter typeConverter) {
+	public static void clear() {
+		get().typeConverter = null;
+	}
+	public static void set(Language lang, ITypeConverter typeConverter) {
 		get().typeConverter = typeConverter;
+		get().lang = lang;
+	}
+	public static boolean is(Language lang) {
+		return get().lang == lang;
 	}
 	public enum ContextType{
 		SERVER,
@@ -59,27 +64,10 @@ public class CodeGeneratorContext {
 			MOBILE.parent = CLIENT;
 		}
 		public static boolean isAndroid() {
-			return ContextLang.JAVA.is() && MOBILE.is();
+			return CodeGeneratorContext.is(Language.JAVA) && MOBILE.is();
 		}
 		public static boolean isiOS() {
-			return ContextLang.SWIFT.is() && MOBILE.is();
-		}
-	}
-	public enum ContextLang{
-		JAVA,
-		SWIFT,
-		TYPESCRIPT,
-		JAVASCRIPT,
-		DART;
-		ContextLang parent;
-		public void init() {
-			CodeGeneratorContext.get().lang = this;
-		}
-		public boolean is() {
-			return CodeGeneratorContext.get().lang.is(this);
-		}
-		public boolean is(ContextLang type) {
-			return this == type || (parent != null && parent.is(type));
+			return CodeGeneratorContext.is(Language.SWIFT) && MOBILE.is();
 		}
 	}
 }
