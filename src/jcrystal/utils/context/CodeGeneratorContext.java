@@ -2,12 +2,14 @@ package jcrystal.utils.context;
 
 import jcrystal.lang.Language;
 import jcrystal.types.IJType;
+import jcrystal.types.convertions.IImportConverter;
 
 public class CodeGeneratorContext {
 	public static final ThreadLocal<CodeGeneratorContext> userThreadLocal = new ThreadLocal<>();
 	public Language lang = null;
 	public ContextType type = null;
 	public ITypeConverter typeConverter;
+	public IImportConverter importConverter;
 	public static void set() {
 		userThreadLocal.set(new CodeGeneratorContext());
 	}
@@ -38,7 +40,11 @@ public class CodeGeneratorContext {
 		get().typeConverter = null;
 	}
 	public static void set(Language lang, ITypeConverter typeConverter) {
+		set(lang, typeConverter, null);
+	}
+	public static void set(Language lang, ITypeConverter typeConverter, IImportConverter importConverter) {
 		get().typeConverter = typeConverter;
+		get().importConverter = importConverter;
 		get().lang = lang;
 	}
 	public static boolean is(Language lang) {

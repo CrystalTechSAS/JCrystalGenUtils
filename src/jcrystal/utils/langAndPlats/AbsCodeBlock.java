@@ -178,17 +178,17 @@ public abstract class AbsCodeBlock extends ArrayList<String> implements AbsICode
     public static class P{
         public final IJType tipo;
         public final String nombre;
-        protected P(String tipo, String nombre){
-              this.tipo = new WrapStringJType(tipo);
-              this.nombre = nombre;
-          }
-        protected P(IJType tipo, String nombre){
+        public P(String tipo, String nombre){
+        	this.tipo = new WrapStringJType(tipo);
+          	this.nombre = nombre;
+        }
+        public P(IJType tipo, String nombre){
             this.tipo = tipo;
             this.nombre = nombre;
         }
         public final PL $(PL params) {
-        		params.lista.add(0, this);
-        		return params;
+        	params.lista.add(0, this);
+        	return params;
         }
     }
     public static class PL{

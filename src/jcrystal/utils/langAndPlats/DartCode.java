@@ -12,7 +12,7 @@ import jcrystal.types.IJType;
 import jcrystal.types.WrapStringJType;
 import jcrystal.utils.StringSeparator;
 
-public class DartCode extends AbsCodeBlock{
+public class DartCode extends AbsImportsCodeBlock{
     private static final long serialVersionUID = 8286135788802310977L;
 
 	public DartCode(){}
