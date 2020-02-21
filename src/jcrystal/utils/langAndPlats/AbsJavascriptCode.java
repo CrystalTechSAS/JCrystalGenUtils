@@ -9,8 +9,6 @@ import java.lang.reflect.Modifier;
 import java.util.stream.Collectors;
 
 public class AbsJavascriptCode extends AbsCodeBlock{
-    private static final long serialVersionUID = 8286135788802310977L;
-
 	public AbsJavascriptCode(){}
     public AbsJavascriptCode(int level){
         super(level);
@@ -87,12 +85,6 @@ public class AbsJavascriptCode extends AbsCodeBlock{
 			$("import " + h + ";");
 	}
 
-	public void append(String val) {
-		if(isEmpty())
-			$(val);
-		else
-			set(size()-1, get(size()-1)+val);
-	}
 	@Override
 	public String $(IJType type) {
 		if(type instanceof WrapStringJType)

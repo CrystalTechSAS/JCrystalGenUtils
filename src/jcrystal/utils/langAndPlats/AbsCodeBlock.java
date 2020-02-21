@@ -11,15 +11,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import jcrystal.types.IJType;
 import jcrystal.types.WrapStringJType;
 
-public abstract class AbsCodeBlock extends ArrayList<String> implements AbsICodeBlock {
-	private static final long serialVersionUID = -994460027594152244L;
+public abstract class AbsCodeBlock implements AbsICodeBlock {
 	protected String prefijo = "";
+	protected final ArrayList<String> code = new ArrayList<>();
     public AbsCodeBlock(){}
     public AbsCodeBlock(int level){
         for(int e = 0; e < level; e++)prefijo+="\t";
@@ -27,7 +28,7 @@ public abstract class AbsCodeBlock extends ArrayList<String> implements AbsICode
     @Override
 	public final int $(String ins){
         this.add(ins);
-        return size()-1;
+        return code.size()-1;
     }
     @Override
 	public final IF $if(String cond, Runnable block){
@@ -102,13 +103,13 @@ public abstract class AbsCodeBlock extends ArrayList<String> implements AbsICode
         
     }
 
-    @Override public boolean add(String s) {
-    		return super.add(prefijo + s);
+    public boolean add(String s) {
+		return code.add(prefijo + s);
     }
 
     public void saveFile(File out){
         try(PrintWriter pw = new PrintWriter(out)){
-            for(String h : this)
+            for(String h : code)
                 pw.println(h);
         } catch (FileNotFoundException e) {
 			NullPointerException ex = new NullPointerException();
@@ -133,7 +134,23 @@ public abstract class AbsCodeBlock extends ArrayList<String> implements AbsICode
 	public final void $SingleCatch(String ex,String p){
         $("catch("+ex+"){"+p+"}");
     }
-
+    @Override
+	public ArrayList<String> getCode() {
+		return code;
+	}
+    @Override
+	public boolean isEmpty() {
+		return code.isEmpty();
+	}
+    @Override
+    public int size() {
+    	return code.size();
+    }
+    @Override
+	public void $append(AbsICodeBlock internal) {
+		for(String line : internal.getCode())
+			$(line);
+	}
     @Override
 	public abstract void $V(String tipo, String name, String valor);
     @Override
@@ -295,6 +312,22 @@ public abstract class AbsCodeBlock extends ArrayList<String> implements AbsICode
 			@Override
 			public String $V(IJType type, String name) {
 				return AbsCodeBlock.this.$V(type, name);
+			}
+			@Override
+			public ArrayList<String> getCode() {
+				return AbsCodeBlock.this.getCode();
+			}
+			@Override
+			public boolean isEmpty() {
+				return AbsCodeBlock.this.isEmpty();
+			}
+			@Override
+			public void $append(AbsICodeBlock internal) {
+				AbsCodeBlock.this.$append(internal);
+			}
+			@Override
+			public int size() {
+				return AbsCodeBlock.this.size();
 			}
     }
     public static void addResource(InputStream resource, Map<String, Object> config, File out) throws Exception{

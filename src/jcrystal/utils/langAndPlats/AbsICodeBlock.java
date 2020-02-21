@@ -1,6 +1,8 @@
 package jcrystal.utils.langAndPlats;
 
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -47,6 +49,10 @@ public interface AbsICodeBlock {
 
 	void $SingleCatch(String ex, String p);
 
+	ArrayList<String> getCode();
+	boolean isEmpty();
+	int size();
+	void $append(AbsICodeBlock internal);
 	//
 	/**
 	 * Variable declaration

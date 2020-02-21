@@ -13,8 +13,6 @@ import jcrystal.types.WrapStringJType;
 import jcrystal.utils.StringSeparator;
 
 public class JavaCode extends AbsCodeBlock{
-    private static final long serialVersionUID = 8286135788802310977L;
-
 	public JavaCode(){}
     public JavaCode(int level){
         super(level);
