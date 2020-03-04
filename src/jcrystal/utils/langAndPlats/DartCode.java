@@ -127,6 +127,14 @@ public class DartCode extends AbsImportsCodeBlock{
 	public String $V(IJType type, String name) {
 		return $(type)+" " + name;
 	}
-	
+	@Override
+	public void $ifNull(String param, Runnable code) {
+		$if(param + " == null", code);
+	}
+
+	@Override
+	public void $ifNotNull(String param, Runnable code) {
+		$if(param + " != null", code);
+	}
 
 }

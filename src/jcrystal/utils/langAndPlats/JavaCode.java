@@ -100,12 +100,10 @@ public class JavaCode extends AbsCodeBlock{
 			if(type.getName().startsWith("java.lang"))
 				return type.getSimpleName();
 			else
-				return type.getName();
+				return type.getName().replace("$", ".");
 		}else if(type.isArray())
 			return $(type.getInnerTypes().get(0))+"[]";
 		else {
-			if((type.getName()+"<" + type.getInnerTypes().stream().map(f->$(f)).collect(Collectors.joining(", ")) + ">").contains("<["))
-				throw new NullPointerException();
 			return type.getName()+"<" + type.getInnerTypes().stream().map(f->$(f)).collect(Collectors.joining(", ")) + ">";
 		}
 	}
@@ -114,5 +112,14 @@ public class JavaCode extends AbsCodeBlock{
 		return $(type)+" " + name;
 	}
 	
+	@Override
+	public void $ifNull(String param, Runnable code) {
+		$if(param + " == null", code);
+	}
+
+	@Override
+	public void $ifNotNull(String param, Runnable code) {
+		$if(param + " != null", code);
+	}
 
 }

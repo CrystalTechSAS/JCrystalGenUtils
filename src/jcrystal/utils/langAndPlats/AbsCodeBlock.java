@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -164,6 +163,13 @@ public abstract class AbsCodeBlock implements AbsICodeBlock {
 	public abstract void $L(String pre, Lambda block, String pos);
     @Override
 	public abstract String buildIf(String cond);
+    
+    @Override
+    public abstract void $ifNull(String cond, Runnable code);
+	@Override
+    public abstract void $ifNotNull(String cond, Runnable code);
+
+	
     public static abstract class Lambda implements Runnable{
         final String params;
         final String ret;
@@ -328,6 +334,14 @@ public abstract class AbsCodeBlock implements AbsICodeBlock {
 			@Override
 			public int size() {
 				return AbsCodeBlock.this.size();
+			}
+			@Override
+			public void $ifNull(String cond, Runnable code) {
+				AbsCodeBlock.this.$ifNull(cond, code);
+			}
+			@Override
+			public void $ifNotNull(String cond, Runnable code) {
+				AbsCodeBlock.this.$ifNotNull(cond, code);
 			}
     }
     public static void addResource(InputStream resource, Map<String, Object> config, File out) throws Exception{

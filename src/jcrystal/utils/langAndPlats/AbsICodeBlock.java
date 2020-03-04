@@ -1,7 +1,6 @@
 package jcrystal.utils.langAndPlats;
 
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -23,7 +22,25 @@ public interface AbsICodeBlock {
 	IF $if(boolean putif, String cond, Runnable block);
 
 	void $if(String cond, String code);
-
+	
+	void $ifNull(String cond, Runnable code);
+	
+	void $ifNotNull(String cond, Runnable code);
+	
+	default void $ifNull(boolean putIf, String cond, Runnable code) {
+		if(putIf || cond == null)
+			code.run();
+		else
+			$ifNull(cond, code);
+	}
+	
+	default void $ifNotNull(boolean putIf, String cond, Runnable code) {
+		if(putIf || cond == null)
+			code.run();
+		else
+			$ifNotNull(cond, code);
+	}
+	
 	void $else_if(String cond, Runnable block);
 
 	void $else(Runnable block);

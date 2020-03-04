@@ -100,4 +100,14 @@ public class AbsJavascriptCode extends AbsCodeBlock{
 	public String $V(IJType type, String name) {
 		return name;
 	}
+	
+	@Override
+	public void $ifNull(String param, Runnable code) {
+		$if(param + " === null || typeof(" + param + ") === 'undefined'", code);
+	}
+
+	@Override
+	public void $ifNotNull(String param, Runnable code) {
+		$if(param + " !== null && typeof(" + param + ") !== 'undefined'", code);
+	}
 }
