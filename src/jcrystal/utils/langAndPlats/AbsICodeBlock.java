@@ -67,6 +67,9 @@ public interface AbsICodeBlock {
 	void $SingleCatch(String ex, String p);
 
 	ArrayList<String> getCode();
+	default String getCodeString(){
+		return getCode().stream().collect(Collectors.joining("\r\n"));
+	};
 	boolean isEmpty();
 	int size();
 	void $append(AbsICodeBlock internal);

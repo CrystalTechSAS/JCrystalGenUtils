@@ -59,19 +59,7 @@ public class JavaCode extends AbsCodeBlock{
         block.run();
         prefijo = lastPre;
         add("}" + pos);
-    }
-    public static void addResource(InputStream resource, String paquete, File out) throws Exception{
-        safeMkdirs(out.getParentFile());
-        try(BufferedReader br = new BufferedReader(new InputStreamReader(resource)); PrintWriter pw = new PrintWriter(out)){
-            pw.println("package "+paquete+";");
-            for(String line; (line = br.readLine())!=null; )
-                pw.println(line);
-        }
-    }
-    
-    public static void safeMkdirs(File f){
-        f.mkdirs();
-    }
+    }    
 
     @Override
     public void $M(int modifiers, String retorno, String name, String params, String excepciones, Runnable block) {
