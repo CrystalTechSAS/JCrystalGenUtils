@@ -47,7 +47,10 @@ public interface AbsICodeBlock {
 
 	void $(String pre, Runnable r);
 	
-	String $(IJType type);
+	default String $(IJType type) {
+		CodeGeneratorContext cnt = CodeGeneratorContext.get(); 
+		return cnt.typeConverter == null ? null : cnt.typeConverter.format(type);
+	}
 	String $V(IJType type, String name);
 	default String $V(P p) {
 		return $V($convert(p.tipo), p.nombre);

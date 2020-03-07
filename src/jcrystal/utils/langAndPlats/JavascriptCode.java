@@ -75,6 +75,9 @@ public class JavascriptCode extends AbsCodeBlock{
 
 	@Override
 	public String $(IJType type) {
+		String superRet = super.$(type);
+		if(superRet != null)
+			return superRet;
 		if(type instanceof WrapStringJType)
 			return type.getName();
 		else if(type.getInnerTypes().isEmpty())

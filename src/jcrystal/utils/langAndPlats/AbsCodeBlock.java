@@ -106,16 +106,6 @@ public abstract class AbsCodeBlock implements AbsICodeBlock {
 		return code.add(prefijo + s);
     }
 
-    public void saveFile(File out){
-        try(PrintWriter pw = new PrintWriter(out)){
-            for(String h : code)
-                pw.println(h);
-        } catch (FileNotFoundException e) {
-			NullPointerException ex = new NullPointerException();
-			ex.initCause(e);
-			throw ex;
-		}
-    }
     @Override
 	public final void $catch(String ex, Runnable block){
         $("catch("+ex+"){");
@@ -344,32 +334,4 @@ public abstract class AbsCodeBlock implements AbsICodeBlock {
 				AbsCodeBlock.this.$ifNotNull(cond, code);
 			}
     }
-    public static void addResource(InputStream resource, Map<String, Object> config, File out) throws Exception{
-	        out.getParentFile().mkdirs();
-	        
-	        try(BufferedReader br = new BufferedReader(new InputStreamReader(resource)){
-	        	public String readLine() throws IOException {
-	        		String line = super.readLine();
-	        		if(line != null)
-	        			for(Entry<String, Object> val : config.entrySet())
-	                		line = line.replace("#"+val.getKey(), ""+val.getValue());
-	                return line;
-	        	};
-	        }; PrintWriter pw = new PrintWriter(out)){
-	        	for(String line; (line = br.readLine())!=null; ){
-	        		if(line.startsWith("#IF")){
-	            		final Boolean val = (Boolean)config.get(line.substring(3).trim());
-	            		ArrayList<String> IF = new ArrayList<>();
-	            		ArrayList<String> ELSE = new ArrayList<>();
-	            		for(;!(line=br.readLine()).startsWith("#");IF.add(line));
-	            		if(line.startsWith("#ELSE"))
-	            			for(;!(line=br.readLine()).startsWith("#");ELSE.add(line));
-	            		if(!line.startsWith("#ENDIF"))
-	            			throw new NullPointerException();
-	            		(val?IF:ELSE).stream().forEach(pw::println);
-	            	}else 
-	            		pw.println(line);
-	            }
-	        }
-	    }
 }

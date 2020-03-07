@@ -7,8 +7,6 @@ import jcrystal.types.IJType;
 import jcrystal.utils.context.CodeGeneratorContext;
 
 public abstract class AbsImportsCodeBlock extends AbsCodeBlock{
-
-	private static final long serialVersionUID = 4822043135587835911L;
 	
 	protected TreeSet<IJType> imports = new TreeSet<>();
 	
