@@ -1,5 +1,8 @@
 package jcrystal.utils.langAndPlats.delegates;
-public interface TypescriptCodeDelegator{
+
+import jcrystal.utils.langAndPlats.AbsICodeBlock;
+
+public interface TypescriptCodeDelegator extends AbsICodeBlock{
 	jcrystal.utils.langAndPlats.TypescriptCode getDelegator();
 	default String $V(jcrystal.types.IJType type, String name){
 		return getDelegator().$V(type, name);
