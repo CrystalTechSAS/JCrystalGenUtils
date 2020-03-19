@@ -19,7 +19,7 @@ import jcrystal.types.WrapStringJType;
 
 public abstract class AbsCodeBlock implements AbsICodeBlock {
 	protected String prefijo = "";
-	protected final ArrayList<String> code = new ArrayList<>();
+	private final ArrayList<String> code = new ArrayList<>();
     public AbsCodeBlock(){}
     public AbsCodeBlock(int level){
         for(int e = 0; e < level; e++)prefijo+="\t";
