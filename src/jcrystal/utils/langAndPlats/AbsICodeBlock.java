@@ -1,6 +1,10 @@
 package jcrystal.utils.langAndPlats;
 
 import java.util.List;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -159,5 +163,13 @@ public interface AbsICodeBlock {
     public default PL $(PL list, P...list2){
         return new PL(list.lista, list2);
     }
-
+    
+    default void addStream(InputStream stream) {
+    	try(BufferedReader br = new BufferedReader(new InputStreamReader(stream))) {
+			for(String h; (h=br.readLine()) != null;)
+				$(h);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    }
 }
