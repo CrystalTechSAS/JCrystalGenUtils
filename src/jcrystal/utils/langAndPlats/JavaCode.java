@@ -76,8 +76,9 @@ public class JavaCode extends AbsCodeBlock{
 	    	this.$(mods + (!retorno.isEmpty()?" " + retorno:"") + " " + name + "(" + params + ")" + excepciones, block);
     }
 	public final void $import(String...packages){
-		for(String h : packages)
-			$("import " + h + ";");
+		if(packages != null)
+			for(String h : packages)
+				$("import " + h + ";");
 	}
 	
 	@Override
