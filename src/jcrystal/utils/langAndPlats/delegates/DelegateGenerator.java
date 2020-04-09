@@ -16,10 +16,10 @@ import jcrystal.utils.langAndPlats.TypescriptCode;
 public class DelegateGenerator {
 	static JClassLoader loader = new JClassLoader();
 	public static void main(String[] args) throws Exception{
-		for(Class<?> clase : new Class<?>[] {JavascriptCode.class, TypescriptCode.class}) {
+		for(Class<?> clase : new Class<?>[] {JavascriptCode.class, TypescriptCode.class, JavaCode.class}) {
 			JavaCode code = new JavaCode() {{
 				$("package jcrystal.utils.langAndPlats.delegates;");
-				$("public interface " + clase.getSimpleName()+"Delegator",()->{
+				$("public interface " + clase.getSimpleName()+"Delegator extends jcrystal.utils.langAndPlats.AbsICodeBlock",()->{
 					$(clase.getName()+" getDelegator();");
 					for(Method m : clase.getMethods()) {
 						if(!m.getDeclaringClass().getName().startsWith("java.lang.")) {
