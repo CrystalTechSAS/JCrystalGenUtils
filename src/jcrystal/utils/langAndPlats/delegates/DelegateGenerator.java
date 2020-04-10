@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import jcrystal.types.JType;
 import jcrystal.types.loaders.JClassLoader;
+import jcrystal.utils.langAndPlats.AbsCodeBlock;
 import jcrystal.utils.langAndPlats.JavaCode;
 import jcrystal.utils.langAndPlats.JavascriptCode;
 import jcrystal.utils.langAndPlats.TypescriptCode;
@@ -16,7 +17,7 @@ import jcrystal.utils.langAndPlats.TypescriptCode;
 public class DelegateGenerator {
 	static JClassLoader loader = new JClassLoader();
 	public static void main(String[] args) throws Exception{
-		for(Class<?> clase : new Class<?>[] {JavascriptCode.class, TypescriptCode.class, JavaCode.class}) {
+		for(Class<?> clase : new Class<?>[] {JavascriptCode.class, TypescriptCode.class, JavaCode.class, AbsCodeBlock.class}) {
 			JavaCode code = new JavaCode() {{
 				$("package jcrystal.utils.langAndPlats.delegates;");
 				$("public interface " + clase.getSimpleName()+"Delegator extends jcrystal.utils.langAndPlats.AbsICodeBlock",()->{

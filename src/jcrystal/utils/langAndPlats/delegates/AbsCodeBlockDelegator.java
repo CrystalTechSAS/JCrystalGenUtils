@@ -1,39 +1,6 @@
 package jcrystal.utils.langAndPlats.delegates;
-public interface JavaCodeDelegator extends jcrystal.utils.langAndPlats.AbsICodeBlock{
-	jcrystal.utils.langAndPlats.JavaCode getDelegator();
-	default String $V(jcrystal.types.IJType type, String name){
-		return getDelegator().$V(type, name);
-	}
-	default void $V(String tipo, String name, String valor){
-		getDelegator().$V(tipo, name, valor);
-	}
-	default jcrystal.utils.langAndPlats.AbsCodeBlock.IF $if_let(String tipo, String name, String valor, String where, Runnable block){
-		return getDelegator().$if_let(tipo, name, valor, where, block);
-	}
-	default String $(jcrystal.types.IJType type){
-		return getDelegator().$(type);
-	}
-	default void $M(int modifiers, String retorno, String name, String params, String excepciones, Runnable block){
-		getDelegator().$M(modifiers, retorno, name, params, excepciones, block);
-	}
-	default void $import(String[] packages){
-		getDelegator().$import(packages);
-	}
-	default void $ifNull(String param, Runnable code){
-		getDelegator().$ifNull(param, code);
-	}
-	default String buildIf(String cond){
-		return getDelegator().buildIf(cond);
-	}
-	default void $ifNotNull(String param, Runnable code){
-		getDelegator().$ifNotNull(param, code);
-	}
-	default void $L(String pre, jcrystal.utils.langAndPlats.AbsCodeBlock.Lambda block, String pos){
-		getDelegator().$L(pre, block, pos);
-	}
-	default void $FE(String tipo, String name, String valor, Runnable block){
-		getDelegator().$FE(tipo, name, valor, block);
-	}
+public interface AbsCodeBlockDelegator extends jcrystal.utils.langAndPlats.AbsICodeBlock{
+	jcrystal.utils.langAndPlats.AbsCodeBlock getDelegator();
 	default boolean add(String s){
 		return getDelegator().add(s);
 	}
@@ -42,6 +9,12 @@ public interface JavaCodeDelegator extends jcrystal.utils.langAndPlats.AbsICodeB
 	}
 	default int size(){
 		return getDelegator().size();
+	}
+	default void $V(String tipo, String name, String valor){
+		getDelegator().$V(tipo, name, valor);
+	}
+	default jcrystal.utils.langAndPlats.AbsCodeBlock.IF $if_let(String tipo, String name, String valor, String where, Runnable block){
+		return getDelegator().$if_let(tipo, name, valor, where, block);
 	}
 	default jcrystal.utils.langAndPlats.AbsCodeBlock.IF $if(String cond, Runnable block){
 		return getDelegator().$if(cond, block);
@@ -67,6 +40,9 @@ public interface JavaCodeDelegator extends jcrystal.utils.langAndPlats.AbsICodeB
 	default void $(String pre, Runnable r){
 		getDelegator().$(pre, r);
 	}
+	default void $M(int modifiers, String retorno, String name, String params, String excepciones, Runnable block){
+		getDelegator().$M(modifiers, retorno, name, params, excepciones, block);
+	}
 	default void $catch(String ex, Runnable block){
 		getDelegator().$catch(ex, block);
 	}
@@ -76,14 +52,29 @@ public interface JavaCodeDelegator extends jcrystal.utils.langAndPlats.AbsICodeB
 	default void $SingleCatch(String ex, String p){
 		getDelegator().$SingleCatch(ex, p);
 	}
+	default void $ifNull(String cond, Runnable code){
+		getDelegator().$ifNull(cond, code);
+	}
 	default void $append(jcrystal.utils.langAndPlats.AbsICodeBlock internal){
 		getDelegator().$append(internal);
+	}
+	default String buildIf(String cond){
+		return getDelegator().buildIf(cond);
+	}
+	default void $ifNotNull(String cond, Runnable code){
+		getDelegator().$ifNotNull(cond, code);
+	}
+	default void $L(String pre, jcrystal.utils.langAndPlats.AbsCodeBlock.Lambda block, String pos){
+		getDelegator().$L(pre, block, pos);
 	}
 	default void $else_if(String cond, Runnable block){
 		getDelegator().$else_if(cond, block);
 	}
 	default void $else(Runnable block){
 		getDelegator().$else(block);
+	}
+	default void $FE(String tipo, String name, String valor, Runnable block){
+		getDelegator().$FE(tipo, name, valor, block);
 	}
 	default void incLevel(){
 		getDelegator().incLevel();
@@ -93,6 +84,9 @@ public interface JavaCodeDelegator extends jcrystal.utils.langAndPlats.AbsICodeB
 	}
 	default String $V(jcrystal.utils.langAndPlats.AbsCodeBlock.P p){
 		return getDelegator().$V(p);
+	}
+	default String $V(jcrystal.types.IJType type, String name){
+		return getDelegator().$V(type, name);
 	}
 	default jcrystal.utils.langAndPlats.AbsCodeBlock.IF $if_let(jcrystal.types.IJType tipo, String name, String valor, String where, Runnable block){
 		return getDelegator().$if_let(tipo, name, valor, where, block);
@@ -108,6 +102,9 @@ public interface JavaCodeDelegator extends jcrystal.utils.langAndPlats.AbsICodeB
 	}
 	default jcrystal.utils.langAndPlats.AbsCodeBlock.PL $(jcrystal.utils.langAndPlats.AbsCodeBlock.PL list, jcrystal.utils.langAndPlats.AbsCodeBlock.P[] list2){
 		return getDelegator().$(list, list2);
+	}
+	default String $(jcrystal.types.IJType type){
+		return getDelegator().$(type);
 	}
 	default void $M(int modifiers, String retorno, String name, jcrystal.utils.StringSeparator params, Runnable block){
 		getDelegator().$M(modifiers, retorno, name, params, block);
