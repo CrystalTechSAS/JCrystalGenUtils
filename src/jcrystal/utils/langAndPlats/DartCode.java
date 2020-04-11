@@ -1,10 +1,5 @@
 package jcrystal.utils.langAndPlats;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.lang.reflect.Modifier;
 import java.util.stream.Collectors;
 
@@ -13,7 +8,6 @@ import jcrystal.types.WrapStringJType;
 import jcrystal.utils.StringSeparator;
 
 public class DartCode extends AbsImportsCodeBlock{
-    private static final long serialVersionUID = 8286135788802310977L;
 
 	public DartCode(){}
     public DartCode(int level){
@@ -85,7 +79,7 @@ public class DartCode extends AbsImportsCodeBlock{
 	@Override
 	public String $(IJType type) {
 		if(type instanceof WrapStringJType)
-			return type.getName();
+			return type.name();
 		if(type.is(boolean.class))
 			return "bool";
 		if(type.is(long.class))
@@ -93,22 +87,22 @@ public class DartCode extends AbsImportsCodeBlock{
 		if(type.is(Long.class))
 			return "int";
 		else if(type.getInnerTypes().isEmpty()) {
-			if(type.getName().startsWith("java.lang"))
+			if(type.name().startsWith("java.lang"))
 				return type.getSimpleName();
 			else if(type.is("org.json.JSONObject"))
 				return "Map<String, dynamic>";
 			else if(type.is("org.json.JSONArray"))
 				return "List<dynamic>";
 			else
-				return type.getName();
+				return type.name();
 		}else if(type.isArray())
 			return $(type.getInnerTypes().get(0))+"[]";
 		else if(type.isIterable())
 			return "List<"+$(type.getInnerTypes().get(0))+">";
 		else {
-			if((type.getName()+"<" + type.getInnerTypes().stream().map(f->$(f)).collect(Collectors.joining(", ")) + ">").contains("<["))
+			if((type.name()+"<" + type.getInnerTypes().stream().map(f->$(f)).collect(Collectors.joining(", ")) + ">").contains("<["))
 				throw new NullPointerException();
-			return type.getName()+"<" + type.getInnerTypes().stream().map(f->$(f)).collect(Collectors.joining(", ")) + ">";
+			return type.name()+"<" + type.getInnerTypes().stream().map(f->$(f)).collect(Collectors.joining(", ")) + ">";
 		}
 	}
 	@Override

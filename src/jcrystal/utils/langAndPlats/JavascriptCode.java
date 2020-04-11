@@ -1,12 +1,11 @@
 package jcrystal.utils.langAndPlats;
 
+import java.lang.reflect.Modifier;
+import java.util.stream.Collectors;
+
 import jcrystal.types.IJType;
 import jcrystal.types.WrapStringJType;
 import jcrystal.utils.StringSeparator;
-
-import java.io.*;
-import java.lang.reflect.Modifier;
-import java.util.stream.Collectors;
 
 public class JavascriptCode extends AbsCodeBlock{
 	public JavascriptCode(){}
@@ -79,13 +78,13 @@ public class JavascriptCode extends AbsCodeBlock{
 		if(superRet != null)
 			return superRet;
 		if(type instanceof WrapStringJType)
-			return type.getName();
+			return type.name();
 		else if(type.getInnerTypes().isEmpty())
-			return type.getName();
+			return type.name();
 		else if(type.isArray())
 			return $(type.getInnerTypes().get(0))+"[]";
 		else
-			return type.getName()+"<" + type.getInnerTypes().stream().map(f->$(f)).collect(Collectors.joining(", ")) + ">";
+			return type.name()+"<" + type.getInnerTypes().stream().map(f->$(f)).collect(Collectors.joining(", ")) + ">";
 	}
 	@Override
 	public String $V(IJType type, String name) {

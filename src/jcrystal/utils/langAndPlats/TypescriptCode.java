@@ -77,7 +77,7 @@ public class TypescriptCode extends AbsImportsCodeBlock{
 		if(superRet != null)
 			return superRet;
 		if(type instanceof WrapStringJType)
-			return type.getName();
+			return type.name();
 		else if(type.is(int.class, long.class, Long.class, Integer.class, double.class, Double.class, float.class))
 			return "number";
 		else if(type.is(boolean.class, Boolean.class))
@@ -86,7 +86,7 @@ public class TypescriptCode extends AbsImportsCodeBlock{
 			return "string";
 		else if(type.is(Date.class))
 			return "any";
-		else if(type.getName().equals("com.google.appengine.api.datastore.GeoPt"))
+		else if(type.name().equals("com.google.appengine.api.datastore.GeoPt"))
 			return "number[]";
 		else if(type.isEnum())
 			return type.getSimpleName();
@@ -95,7 +95,7 @@ public class TypescriptCode extends AbsImportsCodeBlock{
 		else if(type.isArray() || type.isIterable())
 			return $(type.getInnerTypes().get(0))+"[]";
 		else
-			return type.getName()+"<" + type.getInnerTypes().stream().map(f->$(f)).collect(Collectors.joining(", ")) + ">";
+			return type.name()+"<" + type.getInnerTypes().stream().map(f->$(f)).collect(Collectors.joining(", ")) + ">";
 	}
 
 	

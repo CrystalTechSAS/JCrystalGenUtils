@@ -81,12 +81,12 @@ public class SwiftCode extends AbsCodeBlock{
 	@Override
 	public String $(IJType type) {
 		if(type instanceof WrapStringJType)
-			return type.getName();
+			return type.name();
 		return $(type, type.nullable());
 	}
 	public String $(IJType type, boolean nullable) {
 		if(type instanceof WrapStringJType)
-			return type.getName() + (nullable?"?":"");
+			return type.name() + (nullable?"?":"");
 		else if(type.is(int.class))
 			return "Int" + (nullable?"?":"");
 		else if(type.is(double.class))
@@ -111,7 +111,7 @@ public class SwiftCode extends AbsCodeBlock{
 			return "[String: AnyObject]";
 		else if(type.is(JSONArray.class))
 			return "[[String: AnyObject]]";
-		else if(type.getName().equals("java.io.PrintWriter"))
+		else if(type.name().equals("java.io.PrintWriter"))
 			return "OutputStream";
 		else if(type.isArray())
 			return "["+$(type.getInnerTypes().get(0))+"]" + (nullable?"?":"");

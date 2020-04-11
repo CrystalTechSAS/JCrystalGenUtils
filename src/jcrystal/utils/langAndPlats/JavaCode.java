@@ -1,10 +1,5 @@
 package jcrystal.utils.langAndPlats;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.lang.reflect.Modifier;
 import java.util.stream.Collectors;
 
@@ -87,16 +82,16 @@ public class JavaCode extends AbsCodeBlock{
 		if(superRet != null)
 			return superRet;
 		if(type instanceof WrapStringJType)
-			return type.getName();
+			return type.name();
 		else if(type.getInnerTypes().isEmpty()) {
-			if(type.getName().startsWith("java.lang"))
+			if(type.name().startsWith("java.lang"))
 				return type.getSimpleName();
 			else
-				return type.getName().replace("$", ".");
+				return type.name().replace("$", ".");
 		}else if(type.isArray())
 			return $(type.getInnerTypes().get(0))+"[]";
 		else {
-			return type.getName()+"<" + type.getInnerTypes().stream().map(f->$(f)).collect(Collectors.joining(", ")) + ">";
+			return type.name()+"<" + type.getInnerTypes().stream().map(f->$(f)).collect(Collectors.joining(", ")) + ">";
 		}
 	}
 	@Override
