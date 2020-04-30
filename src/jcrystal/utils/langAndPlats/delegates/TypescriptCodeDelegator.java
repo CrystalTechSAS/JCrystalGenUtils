@@ -1,4 +1,7 @@
 package jcrystal.utils.langAndPlats.delegates;
+
+import jcrystal.types.JVariable;
+
 public interface TypescriptCodeDelegator extends jcrystal.utils.langAndPlats.AbsICodeBlock{
 	jcrystal.utils.langAndPlats.TypescriptCode getDelegator();
 	default String $V(jcrystal.types.IJType type, String name){
@@ -97,22 +100,22 @@ public interface TypescriptCodeDelegator extends jcrystal.utils.langAndPlats.Abs
 	default void decLevel(){
 		getDelegator().decLevel();
 	}
-	default String $V(jcrystal.utils.langAndPlats.AbsCodeBlock.P p){
+	default String $V(JVariable p){
 		return getDelegator().$V(p);
 	}
 	default jcrystal.utils.langAndPlats.AbsCodeBlock.IF $if_let(jcrystal.types.IJType tipo, String name, String valor, String where, Runnable block){
 		return getDelegator().$if_let(tipo, name, valor, where, block);
 	}
-	default jcrystal.utils.langAndPlats.AbsCodeBlock.PL $(java.util.List<jcrystal.utils.langAndPlats.AbsCodeBlock.P> list){
+	default jcrystal.utils.langAndPlats.AbsCodeBlock.PL $(java.util.List<JVariable> list){
 		return getDelegator().$(list);
 	}
-	default jcrystal.utils.langAndPlats.AbsCodeBlock.PL $(jcrystal.utils.langAndPlats.AbsCodeBlock.P[] list){
+	default jcrystal.utils.langAndPlats.AbsCodeBlock.PL $(JVariable[] list){
 		return getDelegator().$(list);
 	}
-	default jcrystal.utils.langAndPlats.AbsCodeBlock.PL $(java.util.List<jcrystal.utils.langAndPlats.AbsCodeBlock.P> list, jcrystal.utils.langAndPlats.AbsCodeBlock.P[] list2){
+	default jcrystal.utils.langAndPlats.AbsCodeBlock.PL $(java.util.List<JVariable> list, JVariable[] list2){
 		return getDelegator().$(list, list2);
 	}
-	default jcrystal.utils.langAndPlats.AbsCodeBlock.PL $(jcrystal.utils.langAndPlats.AbsCodeBlock.PL list, jcrystal.utils.langAndPlats.AbsCodeBlock.P[] list2){
+	default jcrystal.utils.langAndPlats.AbsCodeBlock.PL $(jcrystal.utils.langAndPlats.AbsCodeBlock.PL list, JVariable[] list2){
 		return getDelegator().$(list, list2);
 	}
 	default void $M(int modifiers, String retorno, String name, jcrystal.utils.StringSeparator params, Runnable block){
@@ -133,16 +136,13 @@ public interface TypescriptCodeDelegator extends jcrystal.utils.langAndPlats.Abs
 	default void $M(int modifiers, String retorno, String name, java.util.List<String> params, Runnable block){
 		getDelegator().$M(modifiers, retorno, name, params, block);
 	}
-	default void $M(int modifiers, String retorno, String name, java.util.stream.Stream<jcrystal.utils.langAndPlats.AbsCodeBlock.P> params, Runnable block){
+	default void $M(int modifiers, String retorno, String name, java.util.stream.Stream<JVariable> params, Runnable block){
 		getDelegator().$M(modifiers, retorno, name, params, block);
 	}
 	default void $ifNull(boolean putIf, String cond, Runnable code){
 		getDelegator().$ifNull(putIf, cond, code);
 	}
-	default jcrystal.utils.langAndPlats.AbsCodeBlock.P P(String tipo, String nombre){
-		return getDelegator().P(tipo, nombre);
-	}
-	default jcrystal.utils.langAndPlats.AbsCodeBlock.P P(jcrystal.types.IJType tipo, String nombre){
+	default JVariable P(jcrystal.types.IJType tipo, String nombre){
 		return getDelegator().P(tipo, nombre);
 	}
 	default void $ifNotNull(boolean putIf, String cond, Runnable code){

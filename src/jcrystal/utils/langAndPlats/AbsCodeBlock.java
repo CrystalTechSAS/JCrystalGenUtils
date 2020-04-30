@@ -1,21 +1,10 @@
 package jcrystal.utils.langAndPlats;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import jcrystal.types.IJType;
-import jcrystal.types.WrapStringJType;
+import jcrystal.types.JVariable;
+import jcrystal.types.vars.JVariableList;
 
 public abstract class AbsCodeBlock implements AbsICodeBlock {
 	protected String prefijo = "";
@@ -140,8 +129,9 @@ public abstract class AbsCodeBlock implements AbsICodeBlock {
 		for(String line : internal.getCode())
 			$(line);
 	}
-    @Override
-	public abstract void $V(String tipo, String name, String valor);
+    public String $V(JVariable variable){
+    	return this.$(variable.type()) + " " + variable.name();
+    }
     @Override
 	public abstract IF $if_let(String tipo, String name, String valor, String where, Runnable block);
 
@@ -188,63 +178,19 @@ public abstract class AbsCodeBlock implements AbsICodeBlock {
             });
         }
     }
-    public static class P{
-        public final IJType tipo;
-        public final String nombre;
-        public P(String tipo, String nombre){
-        	this.tipo = new WrapStringJType(tipo);
-          	this.nombre = nombre;
-        }
-        public P(IJType tipo, String nombre){
-            this.tipo = tipo;
-            this.nombre = nombre;
-        }
-        public final PL $(PL params) {
-        	params.lista.add(0, this);
-        	return params;
-        }
-    }
-    public static class PL{
-        public final ArrayList<P> lista;
+    public static class PL extends JVariableList{
         public static final PL EMPTY = new PL();
         public PL(){
-            this.lista = new ArrayList<>();
+            super();
         }
-        public PL(java.util.List<P> list){
-            this.lista = new ArrayList<>(list);
+        public PL(java.util.List<JVariable> list){
+        	super(list);
         }
-        public PL(P...list){
-            this.lista = new ArrayList<>(Arrays.asList(list));
+        public PL(JVariable...list){
+        	super(list);
         }
-        protected PL(java.util.List<P> list, P...list2){
-              this.lista = new ArrayList<>(list);
-              this.lista.addAll(Arrays.asList(list2));
-          }
-        public final void add(P p){
-        	lista.add(p);
-        }
-        public String collect(Function<P, String> mapper) {
-        	return lista.stream().map(mapper).collect(Collectors.joining(", "));
-        }
-        public String collect(String prefix, Function<P, String> mapper) {
-        	String ret = lista.stream().map(mapper).collect(Collectors.joining(", "));
-        	if(ret.isEmpty())
-        		return prefix;
-        	return prefix+", "+ret;
-        }
-        public String collect(Function<P, String> mapper, String suffix) {
-        	String ret = lista.stream().map(mapper).collect(Collectors.joining(", "));
-        	if(ret.isEmpty())
-        		return suffix;
-        	return ret + ", "+suffix;
-        }
-        public void adding(P p,Runnable r) {
-        	lista.add(p);
-        	r.run();
-        	lista.remove(lista.size()-1);
-        }
-        public void pop() {
-        	lista.remove(lista.size()-1);
+        protected PL(java.util.List<JVariable> list, JVariable...list2){
+        	super(list, list2);
         }
     }
     
