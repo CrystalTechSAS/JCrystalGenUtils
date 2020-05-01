@@ -8,7 +8,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import jcrystal.types.IJType;
+import jcrystal.types.JVariable;
 import jcrystal.types.WrapStringJType;
+import jcrystal.types.utils.GlobalTypes;
 import jcrystal.utils.StringSeparator;
 
 /**
@@ -25,7 +27,10 @@ public class SwiftCode extends AbsCodeBlock{
 	public final void $V(String tipo, String name, String valor){
 		this.$("var " + name + " : " + tipo + " = " + valor);
 	}
-	
+	@Override
+	public String $V(JVariable variable){
+    	return variable.name() + " : " + this.$(variable.type());
+    }
 	@Override
 	public IF $if_let(String tipo, String name, String valor, String where, Runnable block) {
 		if(where != null && !where.trim().isEmpty()) {
@@ -87,6 +92,10 @@ public class SwiftCode extends AbsCodeBlock{
 	public String $(IJType type, boolean nullable) {
 		if(type instanceof WrapStringJType)
 			return type.name() + (nullable?"?":"");
+		else if(type.isArray() && type.firstInnerType().is(byte.class, Byte.class))
+			return "NSData" + (nullable?"?":"");
+		else if(type.is("jcrystal.server.FileUploadDescriptor"))
+			return "JCFile";
 		else if(type.is(int.class))
 			return "Int" + (nullable?"?":"");
 		else if(type.is(double.class))
@@ -115,6 +124,13 @@ public class SwiftCode extends AbsCodeBlock{
 			return "OutputStream";
 		else if(type.isArray())
 			return "["+$(type.getInnerTypes().get(0))+"]" + (nullable?"?":"");
+		else if(type == GlobalTypes.jCrystal.VoidSuccessListener)
+			return "@escaping ()->()";
+		else if(type == GlobalTypes.jCrystal.ErrorListener)
+			return "@escaping ((RequestError)->())";
+		else if(GlobalTypes.jCrystal.isSuccessListener(type)) {
+			return "@escaping (" + type.getInnerTypes().stream().map(f->$(f, false)).collect(Collectors.joining(", ")) + ") -> ()" + (nullable?"?":"");
+		}
 		else if(type.isIterable())
 			return "[" + type.getInnerTypes().stream().map(f->$(f, false)).collect(Collectors.joining(", ")) + "]" + (nullable?"?":"");
 		else
