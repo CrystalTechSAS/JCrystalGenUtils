@@ -88,9 +88,8 @@ public abstract class AbsCodeBlock implements AbsICodeBlock {
         r2.run();
         prefijo = lastPre;
         $("}"+pos2);
-        
     }
-
+    
     public boolean add(String s) {
 		return code.add(prefijo + s);
     }
@@ -195,89 +194,93 @@ public abstract class AbsCodeBlock implements AbsICodeBlock {
     }
     
     public class B implements AbsICodeBlock{
-    			public final AbsCodeBlock P = AbsCodeBlock.this; 
-    			@Override public int $(String ins) {
-				return AbsCodeBlock.this.$(ins);
-			}
-			@Override public IF $if(String cond, Runnable block) {
-				return AbsCodeBlock.this.$if(cond, block);
-			}
-			@Override public IF $if(boolean putIf, String cond, Runnable block) {
-				return AbsCodeBlock.this.$if(putIf, cond, block);
-			}
-			@Override public void $if(String cond, String code) {
-				AbsCodeBlock.this.$if(cond, code);
-			}
-			@Override public void $else_if(String cond, Runnable block) {
-				AbsCodeBlock.this.$else_if(cond, block);
-			}
-			@Override public void $else(Runnable block) {
-				AbsCodeBlock.this.$else(block);
-			}
-			@Override public void $(String pre, Runnable r) {
-				AbsCodeBlock.this.$(pre, r);
-			}
-			@Override public void $(String pre, Runnable r, String pos) {
-				AbsCodeBlock.this.$(pre, r, pos);
-			}
-			@Override public void $catch(String ex, Runnable block) {
-				AbsCodeBlock.this.$catch(ex, block);
-			}
-			@Override public void $VoidCatch(String ex) {
-				AbsCodeBlock.this.$VoidCatch(ex);
-			}
-			@Override public void $SingleCatch(String ex, String p) {
-				AbsCodeBlock.this.$SingleCatch(ex, p);
-			}
-			@Override public void $V(String tipo, String name, String valor) {
-				AbsCodeBlock.this.$V(tipo, name, valor);
-			}
-			@Override public IF $if_let(String tipo, String name, String valor, String where, Runnable block) {
-				return AbsCodeBlock.this.$if_let(tipo, name, valor, where, block);
-			}
-			@Override public void $FE(String tipo, String name, String valor, Runnable block) {
-				AbsCodeBlock.this.$FE(tipo, name, valor, block);
-			}
-			@Override public void $M(int modifiers, String retorno, String name, String params, String excepciones, Runnable block) {
-				AbsCodeBlock.this.$M(modifiers, retorno, name, params,  excepciones, block);
-			}
-			@Override public void $L(String pre, Lambda block, String pos) {
-				AbsCodeBlock.this.$L(pre, block, pos);
-			}
-			@Override public String buildIf(String cond) {
-				return AbsCodeBlock.this.buildIf(cond);
-			}
-			@Override
-			public String $(IJType type) {
-				return AbsCodeBlock.this.$(type);
-			}
-			@Override
-			public String $V(IJType type, String name) {
-				return AbsCodeBlock.this.$V(type, name);
-			}
-			@Override
-			public ArrayList<String> getCode() {
-				return AbsCodeBlock.this.getCode();
-			}
-			@Override
-			public boolean isEmpty() {
-				return AbsCodeBlock.this.isEmpty();
-			}
-			@Override
-			public void $append(AbsICodeBlock internal) {
-				AbsCodeBlock.this.$append(internal);
-			}
-			@Override
-			public int size() {
-				return AbsCodeBlock.this.size();
-			}
-			@Override
-			public void $ifNull(String cond, Runnable code) {
-				AbsCodeBlock.this.$ifNull(cond, code);
-			}
-			@Override
-			public void $ifNotNull(String cond, Runnable code) {
-				AbsCodeBlock.this.$ifNotNull(cond, code);
-			}
+		public final AbsCodeBlock P = AbsCodeBlock.this; 
+		@Override public int $(String ins) {
+			return AbsCodeBlock.this.$(ins);
+		}
+		@Override public IF $if(String cond, Runnable block) {
+			return AbsCodeBlock.this.$if(cond, block);
+		}
+		@Override public IF $if(boolean putIf, String cond, Runnable block) {
+			return AbsCodeBlock.this.$if(putIf, cond, block);
+		}
+		@Override public void $if(String cond, String code) {
+			AbsCodeBlock.this.$if(cond, code);
+		}
+		@Override public void $else_if(String cond, Runnable block) {
+			AbsCodeBlock.this.$else_if(cond, block);
+		}
+		@Override public void $else(Runnable block) {
+			AbsCodeBlock.this.$else(block);
+		}
+		@Override public void $(String pre, Runnable r) {
+			AbsCodeBlock.this.$(pre, r);
+		}
+		@Override public void $(String pre, Runnable r, String pos) {
+			AbsCodeBlock.this.$(pre, r, pos);
+		}
+		@Override public void $catch(String ex, Runnable block) {
+			AbsCodeBlock.this.$catch(ex, block);
+		}
+		@Override public void $VoidCatch(String ex) {
+			AbsCodeBlock.this.$VoidCatch(ex);
+		}
+		@Override public void $SingleCatch(String ex, String p) {
+			AbsCodeBlock.this.$SingleCatch(ex, p);
+		}
+		@Override public void $V(String tipo, String name, String valor) {
+			AbsCodeBlock.this.$V(tipo, name, valor);
+		}
+		@Override public IF $if_let(String tipo, String name, String valor, String where, Runnable block) {
+			return AbsCodeBlock.this.$if_let(tipo, name, valor, where, block);
+		}
+		@Override public void $FE(String tipo, String name, String valor, Runnable block) {
+			AbsCodeBlock.this.$FE(tipo, name, valor, block);
+		}
+		@Override public void $M(int modifiers, String retorno, String name, String params, String excepciones, Runnable block) {
+			AbsCodeBlock.this.$M(modifiers, retorno, name, params,  excepciones, block);
+		}
+		@Override public void $L(String pre, Lambda block, String pos) {
+			AbsCodeBlock.this.$L(pre, block, pos);
+		}
+		@Override public String buildIf(String cond) {
+			return AbsCodeBlock.this.buildIf(cond);
+		}
+		@Override
+		public String $(IJType type) {
+			return AbsCodeBlock.this.$(type);
+		}
+		@Override
+		public String $V(IJType type, String name) {
+			return AbsCodeBlock.this.$V(type, name);
+		}
+		@Override
+		public ArrayList<String> getCode() {
+			return AbsCodeBlock.this.getCode();
+		}
+		@Override
+		public boolean isEmpty() {
+			return AbsCodeBlock.this.isEmpty();
+		}
+		@Override
+		public void $append(AbsICodeBlock internal) {
+			AbsCodeBlock.this.$append(internal);
+		}
+		@Override
+		public int size() {
+			return AbsCodeBlock.this.size();
+		}
+		@Override
+		public void $ifNull(String cond, Runnable code) {
+			AbsCodeBlock.this.$ifNull(cond, code);
+		}
+		@Override
+		public void $ifNotNull(String cond, Runnable code) {
+			AbsCodeBlock.this.$ifNotNull(cond, code);
+		}
+		@Override
+		public String $toString(IJType type) {
+			return AbsCodeBlock.this.$toString(type);
+		}
     }
 }

@@ -72,7 +72,7 @@ public class TypescriptCode extends AbsImportsCodeBlock{
 	}
 	
 	@Override
-	public String $(IJType type) {
+	public String $toString(IJType type) {
 		String superRet = super.$(type);
 		if(superRet != null)
 			return superRet;

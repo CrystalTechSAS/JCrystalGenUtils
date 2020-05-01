@@ -71,10 +71,9 @@ public class JavascriptCode extends AbsCodeBlock{
 		for(String h : packages)
 			$("import " + h + ";");
 	}
-
-	@Override
-	public String $(IJType type) {
-		String superRet = super.$(type);
+    @Override
+    public String $toString(IJType type) {
+    	String superRet = super.$(type);
 		if(superRet != null)
 			return superRet;
 		if(type instanceof WrapStringJType)

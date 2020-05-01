@@ -84,11 +84,12 @@ public class SwiftCode extends AbsCodeBlock{
 	}
 	
 	@Override
-	public String $(IJType type) {
+	public String $toString(IJType type) {
 		if(type instanceof WrapStringJType)
 			return type.name();
 		return $(type, type.nullable());
 	}
+	
 	public String $(IJType type, boolean nullable) {
 		if(type instanceof WrapStringJType)
 			return type.name() + (nullable?"?":"");

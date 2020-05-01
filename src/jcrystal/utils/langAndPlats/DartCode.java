@@ -75,9 +75,8 @@ public class DartCode extends AbsImportsCodeBlock{
 		for(String h : packages)
 			$("import " + h + ";");
 	}
-	
 	@Override
-	public String $(IJType type) {
+	public String $toString(IJType type) {
 		if(type instanceof WrapStringJType)
 			return type.name();
 		if(type.is(boolean.class))

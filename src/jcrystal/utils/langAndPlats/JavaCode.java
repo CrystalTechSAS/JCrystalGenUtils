@@ -77,10 +77,7 @@ public class JavaCode extends AbsCodeBlock{
 	}
 	
 	@Override
-	public String $(IJType type) {
-		String superRet = super.$(type);
-		if(superRet != null)
-			return superRet;
+	public String $toString(IJType type) {
 		if(type instanceof WrapStringJType)
 			return type.name();
 		else if(type.getInnerTypes().isEmpty()) {
@@ -94,6 +91,7 @@ public class JavaCode extends AbsCodeBlock{
 			return type.name()+"<" + type.getInnerTypes().stream().map(f->$(f)).collect(Collectors.joining(", ")) + ">";
 		}
 	}
+	
 	@Override
 	public String $V(IJType type, String name) {
 		return $(type)+" " + name;
