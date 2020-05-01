@@ -73,9 +73,6 @@ public class TypescriptCode extends AbsImportsCodeBlock{
 	
 	@Override
 	public String $toString(IJType type) {
-		String superRet = super.$(type);
-		if(superRet != null)
-			return superRet;
 		if(type instanceof WrapStringJType)
 			return type.name();
 		else if(type.is(int.class, long.class, Long.class, Integer.class, double.class, Double.class, float.class))
