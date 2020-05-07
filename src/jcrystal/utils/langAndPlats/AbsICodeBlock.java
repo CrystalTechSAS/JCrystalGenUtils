@@ -55,7 +55,7 @@ public interface AbsICodeBlock {
 		CodeGeneratorContext cnt = CodeGeneratorContext.get();
 		String ret = null;
 		if(cnt.typeConverter != null)
-			ret = cnt.typeConverter.$toString(type);
+			ret = cnt.typeConverter.$toString(type, this);
 		if(ret != null)
 			return ret;
 		return $toString(type);

@@ -22,9 +22,7 @@ public abstract class AbsImportsCodeBlock extends AbsCodeBlock{
 		String path = String.join("", Collections.nCopies(stepsToRoot, "../"));
 		CodeGeneratorContext cnt = CodeGeneratorContext.get();
 		if(cnt.importConverter != null) {
-			imports.stream().map(type->cnt.importConverter.getImportLocation(path, type)).filter(type->type != null).forEach(type->{
-				$(type);
-			});
+			imports.stream().map(type->cnt.importConverter.getImportLocation(path, type)).filter(type->type != null).distinct().forEach(this::$);
 		}
 	}
 	public void $imports() {

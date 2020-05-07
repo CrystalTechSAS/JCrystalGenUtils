@@ -4,7 +4,9 @@ import java.util.Date;
 import java.util.stream.Collectors;
 
 import jcrystal.types.IJType;
+import jcrystal.types.JVariable;
 import jcrystal.types.WrapStringJType;
+import jcrystal.types.utils.GlobalTypes;
 import jcrystal.utils.StringSeparator;
 
 /**
@@ -21,7 +23,12 @@ public class TypescriptCode extends AbsImportsCodeBlock{
 	public final void $V(String tipo, String name, String valor){
 		this.$("let " + name + " : " + tipo + " = " + valor+";");
 	}
-	
+	public String $V(JVariable variable){
+		if(variable.value == null)
+			return variable.name() + " : " + this.$(variable.type());
+		else
+			return variable.name() + " : " + this.$(variable.type()) + " = " + variable.value;
+	}
 	@Override
 	public IF $if_let(String tipo, String name, String valor, String where, Runnable block) {
 		$("let " + name + (tipo!=null?":"+tipo:"")+" = this." + valor+";");
@@ -81,6 +88,8 @@ public class TypescriptCode extends AbsImportsCodeBlock{
 			return "boolean";
 		else if(type.is(String.class))
 			return "string";
+		else if(type.is(Object.class))
+			return "any";
 		else if(type.is(Date.class))
 			return "any";
 		else if(type.name().equals("com.google.appengine.api.datastore.GeoPt"))
