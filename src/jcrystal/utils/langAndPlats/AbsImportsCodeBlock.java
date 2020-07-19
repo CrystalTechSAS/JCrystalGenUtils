@@ -24,6 +24,7 @@ public abstract class AbsImportsCodeBlock extends AbsCodeBlock{
 		if(cnt.importConverter != null) {
 			imports.stream().map(type->cnt.importConverter.getImportLocation(path, type)).filter(type->type != null).distinct().forEach(this::$);
 		}
+		imports.clear();
 	}
 	public void $imports() {
 		$imports(1);
