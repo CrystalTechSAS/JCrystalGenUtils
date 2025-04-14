@@ -177,4 +177,9 @@ public interface AbsICodeBlock {
 			e.printStackTrace();
 		}
     }
+
+	// KOTLIN - support
+	public default int º(String ins){
+		return $(ins);
+	}
 }
