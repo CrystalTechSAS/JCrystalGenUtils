@@ -1,10 +1,5 @@
 package jcrystal.utils.langAndPlats;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.lang.reflect.Modifier;
 import java.util.stream.Collectors;
 
@@ -59,19 +54,7 @@ public class JavaCode extends AbsCodeBlock{
         block.run();
         prefijo = lastPre;
         add("}" + pos);
-    }
-    public static void addResource(InputStream resource, String paquete, File out) throws Exception{
-        safeMkdirs(out.getParentFile());
-        try(BufferedReader br = new BufferedReader(new InputStreamReader(resource)); PrintWriter pw = new PrintWriter(out)){
-            pw.println("package "+paquete+";");
-            for(String line; (line = br.readLine())!=null; )
-                pw.println(line);
-        }
-    }
-    
-    public static void safeMkdirs(File f){
-        f.mkdirs();
-    }
+    }    
 
     @Override
     public void $M(int modifiers, String retorno, String name, String params, String excepciones, Runnable block) {
@@ -88,25 +71,27 @@ public class JavaCode extends AbsCodeBlock{
 	    	this.$(mods + (!retorno.isEmpty()?" " + retorno:"") + " " + name + "(" + params + ")" + excepciones, block);
     }
 	public final void $import(String...packages){
-		for(String h : packages)
-			$("import " + h + ";");
+		if(packages != null)
+			for(String h : packages)
+				$("import " + h + ";");
 	}
 	
 	@Override
-	public String $(IJType type) {
+	public String $toString(IJType type) {
 		if(type instanceof WrapStringJType)
-			return type.getName();
+			return type.name();
 		else if(type.getInnerTypes().isEmpty()) {
-			if(type.getName().startsWith("java.lang"))
+			if(type.name().startsWith("java.lang"))
 				return type.getSimpleName();
 			else
-				return type.getName().replace("$", ".");
+				return type.name().replace("$", ".");
 		}else if(type.isArray())
 			return $(type.getInnerTypes().get(0))+"[]";
 		else {
-			return type.getName()+"<" + type.getInnerTypes().stream().map(f->$(f)).collect(Collectors.joining(", ")) + ">";
+			return type.name()+"<" + type.getInnerTypes().stream().map(f->$(f)).collect(Collectors.joining(", ")) + ">";
 		}
 	}
+	
 	@Override
 	public String $V(IJType type, String name) {
 		return $(type)+" " + name;

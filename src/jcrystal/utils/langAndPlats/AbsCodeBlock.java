@@ -1,25 +1,14 @@
 package jcrystal.utils.langAndPlats;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import jcrystal.types.IJType;
-import jcrystal.types.WrapStringJType;
+import jcrystal.types.JVariable;
+import jcrystal.types.vars.JVariableList;
 
 public abstract class AbsCodeBlock implements AbsICodeBlock {
 	protected String prefijo = "";
-	protected final ArrayList<String> code = new ArrayList<>();
+	private final ArrayList<String> code = new ArrayList<>();
     public AbsCodeBlock(){}
     public AbsCodeBlock(int level){
         for(int e = 0; e < level; e++)prefijo+="\t";
@@ -99,23 +88,12 @@ public abstract class AbsCodeBlock implements AbsICodeBlock {
         r2.run();
         prefijo = lastPre;
         $("}"+pos2);
-        
     }
-
+    
     public boolean add(String s) {
 		return code.add(prefijo + s);
     }
 
-    public void saveFile(File out){
-        try(PrintWriter pw = new PrintWriter(out)){
-            for(String h : code)
-                pw.println(h);
-        } catch (FileNotFoundException e) {
-			NullPointerException ex = new NullPointerException();
-			ex.initCause(e);
-			throw ex;
-		}
-    }
     @Override
 	public final void $catch(String ex, Runnable block){
         $("catch("+ex+"){");
@@ -150,8 +128,9 @@ public abstract class AbsCodeBlock implements AbsICodeBlock {
 		for(String line : internal.getCode())
 			$(line);
 	}
-    @Override
-	public abstract void $V(String tipo, String name, String valor);
+    public String $V(JVariable variable){
+    	return this.$(variable.type()) + " " + variable.name();
+    }
     @Override
 	public abstract IF $if_let(String tipo, String name, String valor, String where, Runnable block);
 
@@ -198,178 +177,110 @@ public abstract class AbsCodeBlock implements AbsICodeBlock {
             });
         }
     }
-    public static class P{
-        public final IJType tipo;
-        public final String nombre;
-        public P(String tipo, String nombre){
-        	this.tipo = new WrapStringJType(tipo);
-          	this.nombre = nombre;
-        }
-        public P(IJType tipo, String nombre){
-            this.tipo = tipo;
-            this.nombre = nombre;
-        }
-        public final PL $(PL params) {
-        	params.lista.add(0, this);
-        	return params;
-        }
-    }
-    public static class PL{
-        public final ArrayList<P> lista;
+    public static class PL extends JVariableList{
         public static final PL EMPTY = new PL();
         public PL(){
-            this.lista = new ArrayList<>();
+            super();
         }
-        public PL(java.util.List<P> list){
-            this.lista = new ArrayList<>(list);
+        public PL(java.util.List<JVariable> list){
+        	super(list);
         }
-        public PL(P...list){
-            this.lista = new ArrayList<>(Arrays.asList(list));
+        public PL(JVariable...list){
+        	super(list);
         }
-        protected PL(java.util.List<P> list, P...list2){
-              this.lista = new ArrayList<>(list);
-              this.lista.addAll(Arrays.asList(list2));
-          }
-        public final void add(P p){
-        	lista.add(p);
-        }
-        public String collect(Function<P, String> mapper) {
-        	return lista.stream().map(mapper).collect(Collectors.joining(", "));
-        }
-        public String collect(String prefix, Function<P, String> mapper) {
-        	String ret = lista.stream().map(mapper).collect(Collectors.joining(", "));
-        	if(ret.isEmpty())
-        		return prefix;
-        	return prefix+", "+ret;
-        }
-        public String collect(Function<P, String> mapper, String suffix) {
-        	String ret = lista.stream().map(mapper).collect(Collectors.joining(", "));
-        	if(ret.isEmpty())
-        		return suffix;
-        	return ret + ", "+suffix;
-        }
-        public void adding(P p,Runnable r) {
-        	lista.add(p);
-        	r.run();
-        	lista.remove(lista.size()-1);
-        }
-        public void pop() {
-        	lista.remove(lista.size()-1);
+        protected PL(java.util.List<JVariable> list, JVariable...list2){
+        	super(list, list2);
         }
     }
     
     public class B implements AbsICodeBlock{
-    			public final AbsCodeBlock P = AbsCodeBlock.this; 
-    			@Override public int $(String ins) {
-				return AbsCodeBlock.this.$(ins);
-			}
-			@Override public IF $if(String cond, Runnable block) {
-				return AbsCodeBlock.this.$if(cond, block);
-			}
-			@Override public IF $if(boolean putIf, String cond, Runnable block) {
-				return AbsCodeBlock.this.$if(putIf, cond, block);
-			}
-			@Override public void $if(String cond, String code) {
-				AbsCodeBlock.this.$if(cond, code);
-			}
-			@Override public void $else_if(String cond, Runnable block) {
-				AbsCodeBlock.this.$else_if(cond, block);
-			}
-			@Override public void $else(Runnable block) {
-				AbsCodeBlock.this.$else(block);
-			}
-			@Override public void $(String pre, Runnable r) {
-				AbsCodeBlock.this.$(pre, r);
-			}
-			@Override public void $(String pre, Runnable r, String pos) {
-				AbsCodeBlock.this.$(pre, r, pos);
-			}
-			@Override public void $catch(String ex, Runnable block) {
-				AbsCodeBlock.this.$catch(ex, block);
-			}
-			@Override public void $VoidCatch(String ex) {
-				AbsCodeBlock.this.$VoidCatch(ex);
-			}
-			@Override public void $SingleCatch(String ex, String p) {
-				AbsCodeBlock.this.$SingleCatch(ex, p);
-			}
-			@Override public void $V(String tipo, String name, String valor) {
-				AbsCodeBlock.this.$V(tipo, name, valor);
-			}
-			@Override public IF $if_let(String tipo, String name, String valor, String where, Runnable block) {
-				return AbsCodeBlock.this.$if_let(tipo, name, valor, where, block);
-			}
-			@Override public void $FE(String tipo, String name, String valor, Runnable block) {
-				AbsCodeBlock.this.$FE(tipo, name, valor, block);
-			}
-			@Override public void $M(int modifiers, String retorno, String name, String params, String excepciones, Runnable block) {
-				AbsCodeBlock.this.$M(modifiers, retorno, name, params,  excepciones, block);
-			}
-			@Override public void $L(String pre, Lambda block, String pos) {
-				AbsCodeBlock.this.$L(pre, block, pos);
-			}
-			@Override public String buildIf(String cond) {
-				return AbsCodeBlock.this.buildIf(cond);
-			}
-			@Override
-			public String $(IJType type) {
-				return AbsCodeBlock.this.$(type);
-			}
-			@Override
-			public String $V(IJType type, String name) {
-				return AbsCodeBlock.this.$V(type, name);
-			}
-			@Override
-			public ArrayList<String> getCode() {
-				return AbsCodeBlock.this.getCode();
-			}
-			@Override
-			public boolean isEmpty() {
-				return AbsCodeBlock.this.isEmpty();
-			}
-			@Override
-			public void $append(AbsICodeBlock internal) {
-				AbsCodeBlock.this.$append(internal);
-			}
-			@Override
-			public int size() {
-				return AbsCodeBlock.this.size();
-			}
-			@Override
-			public void $ifNull(String cond, Runnable code) {
-				AbsCodeBlock.this.$ifNull(cond, code);
-			}
-			@Override
-			public void $ifNotNull(String cond, Runnable code) {
-				AbsCodeBlock.this.$ifNotNull(cond, code);
-			}
+		public final AbsCodeBlock P = AbsCodeBlock.this; 
+		@Override public int $(String ins) {
+			return AbsCodeBlock.this.$(ins);
+		}
+		@Override public IF $if(String cond, Runnable block) {
+			return AbsCodeBlock.this.$if(cond, block);
+		}
+		@Override public IF $if(boolean putIf, String cond, Runnable block) {
+			return AbsCodeBlock.this.$if(putIf, cond, block);
+		}
+		@Override public void $if(String cond, String code) {
+			AbsCodeBlock.this.$if(cond, code);
+		}
+		@Override public void $else_if(String cond, Runnable block) {
+			AbsCodeBlock.this.$else_if(cond, block);
+		}
+		@Override public void $else(Runnable block) {
+			AbsCodeBlock.this.$else(block);
+		}
+		@Override public void $(String pre, Runnable r) {
+			AbsCodeBlock.this.$(pre, r);
+		}
+		@Override public void $(String pre, Runnable r, String pos) {
+			AbsCodeBlock.this.$(pre, r, pos);
+		}
+		@Override public void $catch(String ex, Runnable block) {
+			AbsCodeBlock.this.$catch(ex, block);
+		}
+		@Override public void $VoidCatch(String ex) {
+			AbsCodeBlock.this.$VoidCatch(ex);
+		}
+		@Override public void $SingleCatch(String ex, String p) {
+			AbsCodeBlock.this.$SingleCatch(ex, p);
+		}
+		@Override public void $V(String tipo, String name, String valor) {
+			AbsCodeBlock.this.$V(tipo, name, valor);
+		}
+		@Override public IF $if_let(String tipo, String name, String valor, String where, Runnable block) {
+			return AbsCodeBlock.this.$if_let(tipo, name, valor, where, block);
+		}
+		@Override public void $FE(String tipo, String name, String valor, Runnable block) {
+			AbsCodeBlock.this.$FE(tipo, name, valor, block);
+		}
+		@Override public void $M(int modifiers, String retorno, String name, String params, String excepciones, Runnable block) {
+			AbsCodeBlock.this.$M(modifiers, retorno, name, params,  excepciones, block);
+		}
+		@Override public void $L(String pre, Lambda block, String pos) {
+			AbsCodeBlock.this.$L(pre, block, pos);
+		}
+		@Override public String buildIf(String cond) {
+			return AbsCodeBlock.this.buildIf(cond);
+		}
+		@Override
+		public String $(IJType type) {
+			return AbsCodeBlock.this.$(type);
+		}
+		@Override
+		public String $V(IJType type, String name) {
+			return AbsCodeBlock.this.$V(type, name);
+		}
+		@Override
+		public ArrayList<String> getCode() {
+			return AbsCodeBlock.this.getCode();
+		}
+		@Override
+		public boolean isEmpty() {
+			return AbsCodeBlock.this.isEmpty();
+		}
+		@Override
+		public void $append(AbsICodeBlock internal) {
+			AbsCodeBlock.this.$append(internal);
+		}
+		@Override
+		public int size() {
+			return AbsCodeBlock.this.size();
+		}
+		@Override
+		public void $ifNull(String cond, Runnable code) {
+			AbsCodeBlock.this.$ifNull(cond, code);
+		}
+		@Override
+		public void $ifNotNull(String cond, Runnable code) {
+			AbsCodeBlock.this.$ifNotNull(cond, code);
+		}
+		@Override
+		public String $toString(IJType type) {
+			return AbsCodeBlock.this.$toString(type);
+		}
     }
-    public static void addResource(InputStream resource, Map<String, Object> config, File out) throws Exception{
-	        out.getParentFile().mkdirs();
-	        
-	        try(BufferedReader br = new BufferedReader(new InputStreamReader(resource)){
-	        	public String readLine() throws IOException {
-	        		String line = super.readLine();
-	        		if(line != null)
-	        			for(Entry<String, Object> val : config.entrySet())
-	                		line = line.replace("#"+val.getKey(), ""+val.getValue());
-	                return line;
-	        	};
-	        }; PrintWriter pw = new PrintWriter(out)){
-	        	for(String line; (line = br.readLine())!=null; ){
-	        		if(line.startsWith("#IF")){
-	            		final Boolean val = (Boolean)config.get(line.substring(3).trim());
-	            		ArrayList<String> IF = new ArrayList<>();
-	            		ArrayList<String> ELSE = new ArrayList<>();
-	            		for(;!(line=br.readLine()).startsWith("#");IF.add(line));
-	            		if(line.startsWith("#ELSE"))
-	            			for(;!(line=br.readLine()).startsWith("#");ELSE.add(line));
-	            		if(!line.startsWith("#ENDIF"))
-	            			throw new NullPointerException();
-	            		(val?IF:ELSE).stream().forEach(pw::println);
-	            	}else 
-	            		pw.println(line);
-	            }
-	        }
-	    }
 }

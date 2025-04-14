@@ -1,7 +1,6 @@
 package jcrystal.utils.context;
 
 import jcrystal.lang.Language;
-import jcrystal.types.IJType;
 import jcrystal.types.convertions.IImportConverter;
 
 public class CodeGeneratorContext {
@@ -19,22 +18,13 @@ public class CodeGeneratorContext {
 			userThreadLocal.set(ret = new CodeGeneratorContext());
 		return ret;
 	}
-	public static <T extends Exception> void with(ITypeConverter typeConverter, IRunnableWithException<T> code) throws T {
-		ITypeConverter last = get().typeConverter; 
-		get().typeConverter = typeConverter;
+	public static <T extends Exception> void extend(ExtendingTypeConverter typeConverter, IRunnableWithException<T> code) throws T {
+		CodeGeneratorContext context = get();
+		typeConverter.parent = context.typeConverter;
+		context.typeConverter = typeConverter;
 		code.run();
-		get().typeConverter = last;
-	}
-	public static <T extends Exception> void extend(ITypeConverter typeConverter, IRunnableWithException<T> code) throws T {
-		ITypeConverter last = get().typeConverter; 
-		get().typeConverter = type->{
-			IJType ret = typeConverter.convert(type);
-			if(ret == null)
-				return last.convert(type);
-			return ret;
-		};
-		code.run();
-		get().typeConverter = last;
+		context.typeConverter = typeConverter.parent;
+		typeConverter.parent = null;
 	}
 	public static void clear() {
 		get().typeConverter = null;

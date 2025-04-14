@@ -1,16 +1,20 @@
 package jcrystal.utils.langAndPlats;
 
 import java.util.List;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import jcrystal.types.IJType;
+import jcrystal.types.JVariable;
 import jcrystal.utils.StringSeparator;
 import jcrystal.utils.context.CodeGeneratorContext;
 import jcrystal.utils.langAndPlats.AbsCodeBlock.IF;
 import jcrystal.utils.langAndPlats.AbsCodeBlock.Lambda;
-import jcrystal.utils.langAndPlats.AbsCodeBlock.P;
 import jcrystal.utils.langAndPlats.AbsCodeBlock.PL;
 
 public interface AbsICodeBlock {
@@ -47,10 +51,21 @@ public interface AbsICodeBlock {
 
 	void $(String pre, Runnable r);
 	
-	String $(IJType type);
+	default String $(IJType type) {
+		CodeGeneratorContext cnt = CodeGeneratorContext.get();
+		String ret = null;
+		if(cnt.typeConverter != null)
+			ret = cnt.typeConverter.$toString(type, this);
+		if(ret != null)
+			return ret;
+		return $toString(type);
+	}
+	
+	String $toString(IJType type);
+	
 	String $V(IJType type, String name);
-	default String $V(P p) {
-		return $V($convert(p.tipo), p.nombre);
+	default String $V(JVariable p) {
+		return $V($convert(p.type()), p.name());
 	}
 	
 	default IJType $convert(IJType type) {
@@ -67,6 +82,9 @@ public interface AbsICodeBlock {
 	void $SingleCatch(String ex, String p);
 
 	ArrayList<String> getCode();
+	default String getCodeString(){
+		return getCode().stream().collect(Collectors.joining("\r\n"));
+	};
 	boolean isEmpty();
 	int size();
 	void $append(AbsICodeBlock internal);
@@ -110,7 +128,7 @@ public interface AbsICodeBlock {
 	}
 
 	default void $M(int modifiers, String retorno, String name, PL params, Runnable block) {
-		$M(modifiers, retorno, name, params.lista.stream().filter(p->p!=null).map(p->$V(p)).collect(Collectors.joining(", ")), block);
+		$M(modifiers, retorno, name, params.list.stream().filter(p->p!=null).map(p->$V(p)).collect(Collectors.joining(", ")), block);
 	}
 	
 	default void $M(int modifiers, String retorno, String name, StringSeparator params, Runnable block) {
@@ -119,7 +137,7 @@ public interface AbsICodeBlock {
 	default void $M(int modifiers, String retorno, String name, List<String> params, Runnable block) {
 		$M(modifiers, retorno, name, params.stream().collect(Collectors.joining(", ")), block);
 	}
-	default void $M(int modifiers, String retorno, String name, Stream<P> params, Runnable block) {
+	default void $M(int modifiers, String retorno, String name, Stream<JVariable> params, Runnable block) {
 		$M(modifiers, retorno, name, params.map(p->$V(p)).collect(Collectors.joining(", ")), block);
 	}
 
@@ -128,30 +146,35 @@ public interface AbsICodeBlock {
 	}
 	
 	default void $M(int modifiers, String retorno, String name, PL params, String excepciones, Runnable block) {
-		$M(modifiers, retorno, name, params.lista.stream().filter(p->p!=null).map(p->$V(p)).collect(Collectors.joining(", ")), excepciones, block);
+		$M(modifiers, retorno, name, params.list.stream().filter(p->p!=null).map(p->$V(p)).collect(Collectors.joining(", ")), excepciones, block);
 	}
 
 	void $L(String pre, Lambda block, String pos);
 
 	String buildIf(String cond);
 
-	public default P P(String tipo, String nombre){
-	        return new P(tipo, nombre);
-	    }
-	public default P P(IJType tipo, String nombre){
-        return new P(tipo, nombre);
+	public default JVariable P(IJType type, String name){
+        return new JVariable(type, name);
     }
-    public default PL $(P...list){
+    public default PL $(JVariable...list){
         return new PL(list);
     }
-    public default PL $(List<P> list){
+    public default PL $(List<JVariable> list){
         return new PL(list);
     }
-    public default PL $(List<P> list, P...list2){
+    public default PL $(List<JVariable> list, JVariable...list2){
         return new PL(list, list2);
     }
-    public default PL $(PL list, P...list2){
-        return new PL(list.lista, list2);
+    public default PL $(PL list, JVariable...list2){
+        return new PL(list.list, list2);
     }
-
+    
+    default void addStream(InputStream stream) {
+    	try(BufferedReader br = new BufferedReader(new InputStreamReader(stream))) {
+			for(String h; (h=br.readLine()) != null;)
+				$(h);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    }
 }
