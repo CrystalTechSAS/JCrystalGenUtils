@@ -182,4 +182,10 @@ public interface AbsICodeBlock {
 	public default int º(String ins){
 		return $(ins);
 	}
+	public default void º(String pre, Runnable r){
+		$(pre, r);
+	}
+	public default void º(String pre, Runnable r, String pos){
+		$(pre, r, pos);
+	}
 }
