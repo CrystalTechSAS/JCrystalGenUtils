@@ -2,6 +2,7 @@ package jcrystal.utils.context;
 
 import jcrystal.lang.Language;
 import jcrystal.types.convertions.IImportConverter;
+import jcrystal.types.loaders.IJClassLoader;
 
 public class CodeGeneratorContext {
 	public static final ThreadLocal<CodeGeneratorContext> userThreadLocal = new ThreadLocal<>();
@@ -9,6 +10,7 @@ public class CodeGeneratorContext {
 	public ContextType type = null;
 	public ITypeConverter typeConverter;
 	public IImportConverter importConverter;
+	public IJClassLoader classLoader;
 	public static void set() {
 		userThreadLocal.set(new CodeGeneratorContext());
 	}
@@ -28,6 +30,9 @@ public class CodeGeneratorContext {
 	}
 	public static void clear() {
 		get().typeConverter = null;
+	}
+	public static void set(IJClassLoader classLoader){
+		get().classLoader = classLoader;
 	}
 	public static void set(Language lang, ITypeConverter typeConverter) {
 		set(lang, typeConverter, null);

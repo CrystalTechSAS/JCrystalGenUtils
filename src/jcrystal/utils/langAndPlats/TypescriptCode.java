@@ -92,7 +92,7 @@ public class TypescriptCode extends AbsImportsCodeBlock{
 			return "any";
 		else if(type.is(Date.class))
 			return "any";
-		else if(type.name().equals("com.google.appengine.api.datastore.GeoPt"))
+		else if(type.name() != null && type.name().equals("com.google.appengine.api.datastore.GeoPt"))
 			return "number[]";
 		else if(type.isEnum())
 			return type.getSimpleName();
