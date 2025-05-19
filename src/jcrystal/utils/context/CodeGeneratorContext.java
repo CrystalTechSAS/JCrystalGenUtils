@@ -29,7 +29,12 @@ public class CodeGeneratorContext {
 		typeConverter.parent = null;
 	}
 	public static void clear() {
-		get().typeConverter = null;
+		CodeGeneratorContext ret = get();
+		ret.typeConverter = null;
+		ret.importConverter = null;
+		ret.classLoader = null;
+		ret.type = null;
+		ret.lang = null;
 	}
 	public static void set(IJClassLoader classLoader){
 		get().classLoader = classLoader;
