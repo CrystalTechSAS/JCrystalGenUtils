@@ -26,7 +26,7 @@
 	<dependency>
 	    <groupId>com.github.CrystalTechSAS</groupId>
 	    <artifactId>jCrystalTypeSystem</artifactId>
-	    <version>1.2.1</version>
+	    <version>bcf81ea6d11b0440a744c43b94a6e1660a113d71</version>
 	</dependency>
   </dependencies>
   <repositories>
